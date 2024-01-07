@@ -46,10 +46,29 @@
         <div class="container my-4">
             <div class="p-4">
 
-                <h3 class="text-2xl font-bold mb-4">Prefix Sum Algorithm's Graph</h3>
+                <h3 class="text-2xl font-bold mb-4 mt-10">Prefix Sum Algorithm's Graph</h3>
                 <p class="mb-4">Please input the power of two.</p>
-                <input id="myInput" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
-                <div class="w-full mt-5">
+
+
+                <div class="flex-inline">
+                    <label for="selectAlgorithms">Choose a Algorithm:</label>
+                    <select name="selectAlgorithms" id="selectAlgorithms"
+                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
+                        <option value="blelloch">Blelloch</option>
+                        <option value="esact" selected="selected">ESACT</option>
+                    </select>
+                </div>
+
+
+                <div class="flex-inline">
+                    <label for="inputNumberOfNodes">Choose a Algorithm:</label>
+                    <input id="inputNumberOfNodes" value="8" type="number"
+                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
+                </div>
+
+
+
+                <div class="w-full mt-5 overflow-hidden">
                     <div class="m-0">
                         <svg id="canvas"></svg>
                     </div>
@@ -60,7 +79,7 @@
 
     <script>
         // window.addEventListener('DOMContentLoaded', () => {
-        const input = document.getElementById('myInput');
+        const input = document.getElementById('inputNumberOfNodes');
 
         // Your D3.js code to fill the SVG goes here
 
@@ -70,6 +89,30 @@
 
 
         // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+
+
+        function Text(x, y, text) {
+            this.x = x;
+            this.y = y;
+            this.text = text;
+
+
+            if (this.text !== "") {
+                this.elem = svgD3.append("text")
+                    .attr("x", this.x)
+                    .attr("y", this.y)
+                    .attr("text-anchor", "middle")
+                    .attr("dominant-baseline", "central")
+                    .text(this.text);
+            }
+
+            // Return a reference to the rectangle for future use
+            return this;
+
+
+
+        }
+
 
         // Node component representing a rectangle
         class Node {
@@ -101,14 +144,7 @@
             }
 
             addText(text) {
-                if (text !== "") {
-                    svgD3.append("text")
-                        .attr("x", this.x + this.width / 2)
-                        .attr("y", this.y + this.height / 2)
-                        .attr("text-anchor", "middle")
-                        .attr("dominant-baseline", "central")
-                        .text(text);
-                }
+                Text(this.x + this.width / 2, this.y + this.height / 2, text);
             }
 
 
@@ -146,14 +182,24 @@
             }
         }
 
+
+        function createIndices(n) {
+  let omega = [];
+  omega[0] = n - 1;
+
+  for (let i = 0; 2 * i + 1 < n; i++) {
+    omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
+    omega[2 * i + 1] = Math.floor(omega[i] / 2);
+  }
+
+  return omega;
+}
+
+
+
         function create_svg(number_nodes) {
 
             svgD3.selectAll("*").remove();
-
-
-            const number_of_steps = Math.floor(Math.log2(number_nodes) + 1) * 2
-
-
             // Create the arrow marker definition
             svgD3.append("svg:defs").append("svg:marker")
                 .attr("id", "arrow")
@@ -167,50 +213,40 @@
                 .attr("d", "M0,-5L10,0L0,5")
                 .attr("fill", "black");
 
+            const selectAlg = document.getElementById("selectAlgorithms");
+
+
+
+            const number_of_steps = Math.floor(Math.log2(number_nodes) + 1) * 2
+
+
+
+
             // Create two instances of the Node component
+
             var nodes = Array.from({ length: number_of_steps }, (_, col) =>
                 Array.from({ length: number_nodes }, (_, row) =>
-                    new Node(row * (Node.width), col * (Node.height * 2)).draw()
+                    new Node(row * (Node.width), (col + 1) * (Node.height * 2)).draw()
                 )
             );
-            // var node1 = new Node(150, 50).draw();
 
-            // Create an instance of the Arrow component to connect node1 and node2
+            var input_nodes = Array.from({ length: number_nodes }, (_, i) =>
+                new Node(i * (Node.width), 0, "aquamarine", `X_${i}`).draw()
+            );
 
-            let row = 0
-
-            for (let i = 0; i < number_nodes; i++) {
-                nodes[row][i].addText("X" + i + "");
-            }
-
-            for (let s = 2; s <= number_nodes; s <<= 1) {
-                for (let i = 0; i < number_nodes / s; i++) {
-                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
-                }
-                row++;
-            }
-            new Arrow(nodes[row][number_nodes - 1], nodes[++row][number_nodes - 1], "red").draw();
-
-            for (let s = number_nodes; s > 1; s >>= 1) {
-                for (let i = 0; i < number_nodes / s; i++) {
-                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
-                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1]).draw();
-                }
-                row++;
-            }
+            var output_nodes = Array.from({ length: number_nodes }, (_, i) =>
+                new Node(i * (Node.width), (number_of_steps + 1) * (Node.height * 2), "aquamarine", `Y_${i}`).draw()
+            );
 
             const totalwidth = (Node.width + 1) * number_nodes;
-            const totalheight = (Node.height * 2) * number_of_steps;
+            const totalheight = (Node.height * 2) * (number_of_steps + 2);
+
 
 
             svgD3.style("width", totalwidth + 'px')
                 .style("height", totalheight + 'px');
 
             let svgElem = document.getElementById('canvas');
-            // svgElem.setAttribute("width", `${totalwidth}px`);
-            // svgElem.setAttribute("height", `${totalheight}px`);
 
 
 
@@ -219,20 +255,101 @@
 
 
 
+
             // JavaScript code to scale the SVG if width is larger
             const svgMaxWidth = svgElem.parentElement.clientWidth;
             const svgClientWidth = svgElem.clientWidth
             const scaleRatio = svgMaxWidth / svgClientWidth;
             if (scaleRatio < 1) {
-                console.log(scaleRatio);
-                console.log(svgClientWidth);
-                console.log(svgMaxWidth);
-
                 svgD3.style("transform", `scale(${scaleRatio})`);
                 svgD3.style("transform-origin", "top left");
-
-
                 //   svgElem.style.transform = `scale(${scaleRatio})`;
+            }
+
+            svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+            svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+
+
+
+
+            switch (selectAlg.value) {
+                case "blelloch":
+
+                    {
+                        for (let i = 0; i < number_nodes; i++) {
+                            new Arrow(input_nodes[i], nodes[0][i]).draw();
+                        }
+
+                        let row = 0
+                        for (let s = 2; s <= number_nodes; s <<= 1) {
+                            for (let i = 0; i < number_nodes / s; i++) {
+                                new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                            }
+                            row++;
+                        }
+                        const sum_node = nodes[row++][number_nodes - 1];
+                        new Arrow(sum_node, nodes[row][number_nodes - 1], "red").draw();
+                        sum_node.elem.attr("fill", "lightcyan");
+                        sum_node.addText("Sum");
+                        nodes[row][number_nodes - 1].addText("0");
+
+
+                        for (let s = number_nodes; s > 1; s >>= 1) {
+                            for (let i = 0; i < number_nodes / s; i++) {
+                                new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1], "darkgreen").draw();
+                            }
+                            row++;
+                        }
+
+                        for (let i = 0; i < number_nodes; i++) {
+                            new Arrow(nodes[number_nodes - 1][i], output_nodes[i]).draw();
+                        }
+
+                    }
+                    // code block
+                    break;
+                case "esact":
+                    {
+                        
+                        const indices = createIndices(number_nodes);
+                        for (let i = 0; i < number_nodes; i++) {
+                            new Arrow(input_nodes[i], nodes[0][indices[i]]).draw();
+                        }
+
+                        let row = 0
+                        for (let s = number_nodes >> 1; s > 0; s >>= 1) {
+                            for (let i = 0; i < s; i++) {
+                                new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
+                                new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
+                            }
+                            row++;
+                        }
+                        const sum_node = nodes[row++][0];
+                        new Arrow(sum_node, nodes[row][0], "red").draw();
+                        sum_node.elem.attr("fill", "lightcyan"); 
+                        sum_node.addText("Sum");
+                        nodes[row][0].addText("0");
+
+
+
+
+                        for (let s = 1; s < number_nodes; s <<= 1) {
+                            for (let i = 0; i < s; i++) {
+                                new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
+                                new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
+                                                        }
+                            row++;
+                        }
+                        
+                        for (let i = 0; i < number_nodes; i++) {
+                            new Arrow(nodes[row][indices[i]], output_nodes[i]).draw();
+                        }
+                    } break;
+                default:
+                    console.log("error");
             }
         }
 
@@ -246,15 +363,16 @@
 
 
 
-        var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
-        var isDesktop = window.screenX != 0 && !isTouchDevice() ? true : false;
+        // var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
+        // var isDesktop = window.screenX != 0 && !isTouchDevice() ? true : false;
 
-        console.log(isDesktop?"Desktop Mode": "Mobile Mode")
-        if (isDesktop) {
-            addEventListener("resize", () => {
-                create_svg(parseInt(input.value));
-            });
-        }
+        // console.log(isDesktop?"Desktop Mode": "Mobile Mode")
+        // if (isDesktop) {
+        addEventListener("resize", () => {
+            console.log("resize")
+            create_svg(parseInt(input.value));
+        });
+        // }
 
 
 
