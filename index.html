@@ -2,267 +2,258 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://d3js.org/d3.v6.min.js"></script>
-  <!-- Include Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Include Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <!-- Add custom styles for GitHub repository page -->
-  <style>
-    html,
-    body {
-      height: 100%;
-    }
-/* 
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: auto;
-    } */
+    <title>Prefix Sum Algorithm</title>
 
+    <meta charset="UTF-8">
 
-    .content {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Add custom styles for GitHub repository page -->
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
 
-    .github-logo {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 10;
-    }
-  </style>
+        .github-logo {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
-  <div class="container">
-    <div class="flex flex-row">
-      <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer" class="github-logo inline">
-        <i class="fab fa-github fa-2x flex flex-inline"></i>
-        <span class="m-1 flex-inline">
-            <img src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social">
-        </span>
-      </a>
-    </div>
-    <div class="container my-4">
-        <div class="p-4">
+    <div class="container">
+        <div class="f">
+            <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank"
+                rel="noopener noreferrer" class="github-logo">
+                <div class="inline flex-col relative">
+                    <i class="fab fa-github fa-2x flex"></i> 
+                    <span class="">
+                        Github Repo
+                    </span> 
+                </div>
+                <img class="flex" src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social"/>
+            </a>
+        </div>
+        <div class="container my-4">
+            <div class="p-4">
 
-            <h3 class="text-2xl font-bold mb-4">Graph creator</h3>
-            <p class="mb-4">Please input the power of two.</p>
-            <input id="myInput" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
-            <div class="w-full">
-                <div class="m-0">
-                    <svg id="canvas"></svg>
+                <h3 class="text-2xl font-bold mb-4">Prefix Sum Algorithm's Graph</h3>
+                <p class="mb-4">Please input the power of two.</p>
+                <input id="myInput" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
+                <div class="w-full mt-5">
+                    <div class="m-0">
+                        <svg id="canvas"></svg>
+                    </div>
                 </div>
             </div>
-      </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // window.addEventListener('DOMContentLoaded', () => {
-      const input = document.getElementById('myInput');
+    <script>
+        // window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('myInput');
 
-      // Your D3.js code to fill the SVG goes here
-      
+        // Your D3.js code to fill the SVG goes here
 
 
-      var svgD3 = d3.select("svg#canvas").attr("preserveAspectRatio", "xMinYMin meet");
+
+        var svgD3 = d3.select("svg#canvas").attr("preserveAspectRatio", "xMinYMin meet");
 
 
-// https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+        // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
 
-// Node component representing a rectangle
-class Node {
-    static width = 100;
-    static height = 50;
+        // Node component representing a rectangle
+        class Node {
+            static width = 100;
+            static height = 50;
 
-    constructor(x, y, colorfill = "powderblue", text = "") {
-        this.x = x;
-        this.y = y;
-        this.colorfill = colorfill;
-        this.width = Node.width;
-        this.height = Node.height;
-        this.text = text;
-    }
+            constructor(x, y, colorfill = "powderblue", text = "") {
+                this.x = x;
+                this.y = y;
+                this.colorfill = colorfill;
+                this.width = Node.width;
+                this.height = Node.height;
+                this.text = text;
+            }
 
-    draw() {
-        this.elem = svgD3.append("rect")
-            .attr("x", this.x)
-            .attr("y", this.y)
-            .attr("width", this.width)
-            .attr("height", this.height)
-            .attr("stroke", "black")
-            .attr("fill", this.colorfill);
+            draw() {
+                this.elem = svgD3.append("rect")
+                    .attr("x", this.x)
+                    .attr("y", this.y)
+                    .attr("width", this.width)
+                    .attr("height", this.height)
+                    .attr("stroke", "black")
+                    .attr("fill", this.colorfill);
 
-        this.addText(this.text);
+                this.addText(this.text);
 
-        // Return self for method chaining
-        return this;
-    }
+                // Return self for method chaining
+                return this;
+            }
 
-    addText(text){
-        if (text !== "") {
-            svgD3.append("text")
-                .attr("x", this.x + this.width / 2)
-                .attr("y", this.y + this.height / 2)
-                .attr("text-anchor", "middle")
-                .attr("dominant-baseline", "central")
-                .text(text);
+            addText(text) {
+                if (text !== "") {
+                    svgD3.append("text")
+                        .attr("x", this.x + this.width / 2)
+                        .attr("y", this.y + this.height / 2)
+                        .attr("text-anchor", "middle")
+                        .attr("dominant-baseline", "central")
+                        .text(text);
+                }
+            }
+
+
+            getBottomCenter() {
+                return { x: this.x + this.width / 2, y: this.y + this.height };
+            }
+
+            getTopCenter() {
+                return { x: this.x + this.width / 2, y: this.y };
+            }
         }
-    }
+
+        // Arrow component to draw an arrow between two nodes
+        class Arrow {
+            constructor(fromNode, toNode, color = "black") {
 
 
-    getBottomCenter() {
-        return { x: this.x + this.width / 2, y: this.y + this.height };
-    }
+                this.draw = function () {
+                    var start = fromNode.getBottomCenter();
+                    var end = toNode.getTopCenter();
 
-    getTopCenter() {
-        return { x: this.x + this.width / 2, y: this.y };
-    }
-}
-
-// Arrow component to draw an arrow between two nodes
-class Arrow{
-    constructor(fromNode, toNode, color="black") {
-        
-    
-    this.draw = function () {
-        var start = fromNode.getBottomCenter();
-        var end = toNode.getTopCenter();
-
-        const calcX = (n1, n2) => {
-            const tmp = .95 * n1.x + .05 * n2.x;
-            return Math.max(Math.min(tmp, n1.x + Node.width * .3), n1.x - Node.width * .3);
-        };
-        svgD3.append("line")
-            .attr("x1", calcX(start, end))
-            .attr("y1", start.y)
-            .attr("x2", calcX(end, start))
-            .attr("y2", end.y - 1)
-            .attr("stroke", color)
-            .attr("stroke-width", 2)
-            .attr("marker-end", "url(#arrow)");
-    }
-}
-}
-
-function create_svg(number_nodes) {
-
-    svgD3.selectAll("*").remove();
-
-
-    const number_of_steps = Math.floor(Math.log2(number_nodes) + 1) * 2
-
-
-    // Create the arrow marker definition
-    svgD3.append("svg:defs").append("svg:marker")
-        .attr("id", "arrow")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 8) // Adjust the refX to offset the arrow to align properly
-        .attr("refY", 0)
-        .attr("markerWidth", 4)
-        .attr("markerHeight", 4)
-        .attr("orient", "auto")
-        .append("svg:path")
-        .attr("d", "M0,-5L10,0L0,5")
-        .attr("fill", "black");
-
-    // Create two instances of the Node component
-    var nodes = Array.from({ length: number_of_steps }, (_, col) =>
-        Array.from({ length: number_nodes }, (_, row) =>
-            new Node(row * (Node.width), col * (Node.height * 2)).draw()
-        )
-    );
-    // var node1 = new Node(150, 50).draw();
-
-    // Create an instance of the Arrow component to connect node1 and node2
-
-    let row = 0
-
-    for (let i = 0; i < number_nodes; i++) {
-        nodes[row][i].addText("X" + i + "");
-    }
-        
-    for (let s = 2; s <= number_nodes; s <<= 1) {
-        for (let i = 0; i < number_nodes / s; i++) {
-            new Arrow(nodes[row][s * i + Math.floor(s/2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-            new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                    const calcX = (n1, n2) => {
+                        const tmp = .95 * n1.x + .05 * n2.x;
+                        return Math.max(Math.min(tmp, n1.x + Node.width * .3), n1.x - Node.width * .3);
+                    };
+                    svgD3.append("line")
+                        .attr("x1", calcX(start, end))
+                        .attr("y1", start.y)
+                        .attr("x2", calcX(end, start))
+                        .attr("y2", end.y - 1)
+                        .attr("stroke", color)
+                        .attr("stroke-width", 2)
+                        .attr("marker-end", "url(#arrow)");
+                }
+            }
         }
-        row++;
-    }
-    new Arrow(nodes[row][number_nodes-1], nodes[++row][number_nodes-1], "red").draw();
 
-    for (let s = number_nodes; s > 1; s >>= 1) {
-        for (let i = 0; i < number_nodes / s; i++) {
-            new Arrow(nodes[row][s * i + Math.floor(s/2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-            new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
-            new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s/2) - 1]).draw();
+        function create_svg(number_nodes) {
+
+            svgD3.selectAll("*").remove();
+
+
+            const number_of_steps = Math.floor(Math.log2(number_nodes) + 1) * 2
+
+
+            // Create the arrow marker definition
+            svgD3.append("svg:defs").append("svg:marker")
+                .attr("id", "arrow")
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 8) // Adjust the refX to offset the arrow to align properly
+                .attr("refY", 0)
+                .attr("markerWidth", 4)
+                .attr("markerHeight", 4)
+                .attr("orient", "auto")
+                .append("svg:path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .attr("fill", "black");
+
+            // Create two instances of the Node component
+            var nodes = Array.from({ length: number_of_steps }, (_, col) =>
+                Array.from({ length: number_nodes }, (_, row) =>
+                    new Node(row * (Node.width), col * (Node.height * 2)).draw()
+                )
+            );
+            // var node1 = new Node(150, 50).draw();
+
+            // Create an instance of the Arrow component to connect node1 and node2
+
+            let row = 0
+
+            for (let i = 0; i < number_nodes; i++) {
+                nodes[row][i].addText("X" + i + "");
+            }
+
+            for (let s = 2; s <= number_nodes; s <<= 1) {
+                for (let i = 0; i < number_nodes / s; i++) {
+                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                }
+                row++;
+            }
+            new Arrow(nodes[row][number_nodes - 1], nodes[++row][number_nodes - 1], "red").draw();
+
+            for (let s = number_nodes; s > 1; s >>= 1) {
+                for (let i = 0; i < number_nodes / s; i++) {
+                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1]).draw();
+                }
+                row++;
+            }
+
+            const totalwidth = (Node.width + 1) * number_nodes;
+            const totalheight = (Node.height * 2) * number_of_steps;
+
+
+            svgD3.style("width", totalwidth + 'px')
+                .style("height", totalheight + 'px');
+
+            let svgElem = document.getElementById('canvas');
+            // svgElem.setAttribute("width", `${totalwidth}px`);
+            // svgElem.setAttribute("height", `${totalheight}px`);
+
+
+
+
+            // svgD3.style("transform", "scale(0.5) translate(-100%, -100%)");
+
+
+
+            // JavaScript code to scale the SVG if width is larger
+            const svgMaxWidth = svgElem.parentElement.clientWidth;
+            const svgClientWidth = svgElem.clientWidth
+            const scaleRatio = svgMaxWidth / svgClientWidth;
+            if (scaleRatio < 1) {
+                console.log(scaleRatio);
+                console.log(svgClientWidth);
+                console.log(svgMaxWidth);
+
+                svgD3.style("transform", `scale(${scaleRatio})`);
+                svgD3.style("transform-origin", "top left");
+
+
+                //   svgElem.style.transform = `scale(${scaleRatio})`;
+            }
         }
-        row++;
-    }
 
-    const totalwidth = (Node.width + 1) * number_nodes;
-    const totalheight = (Node.height * 2) * number_of_steps;
-
-
-    svgD3.style("width", totalwidth + 'px')
-        .style("height", totalheight + 'px');
-
-    let svgElem = document.getElementById('canvas');
-    // svgElem.setAttribute("width", `${totalwidth}px`);
-    // svgElem.setAttribute("height", `${totalheight}px`);
-
-
-
-
-    // svgD3.style("transform", "scale(0.5) translate(-100%, -100%)");
-
-
-
-          // JavaScript code to scale the SVG if width is larger
-          const svgMaxWidth = svgElem.parentElement.clientWidth;
-          const svgClientWidth = svgElem.clientWidth
-          const scaleRatio = svgMaxWidth / svgClientWidth;
-          if (scaleRatio < 1) {
-          console.log(scaleRatio);
-          console.log(svgClientWidth);
-          console.log(svgMaxWidth);
-
-        svgD3.style("transform", `scale(${scaleRatio})`);
-        svgD3.style("transform-origin", "top left");
-        
-
-        //   svgElem.style.transform = `scale(${scaleRatio})`;
-      }
-}
-
-input.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
+        input.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                create_svg(parseInt(input.value));
+            }
+        });
         create_svg(parseInt(input.value));
-    }
-});
-create_svg(parseInt(input.value));
 
 
-addEventListener("resize", () => {
-    create_svg(parseInt(input.value));
-});
+        addEventListener("resize", () => {
+            create_svg(parseInt(input.value));
+        });
 
 
 
 
 
-    // });
-  </script>
+        // });
+    </script>
 </body>
 
 </html>
