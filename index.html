@@ -263,11 +263,10 @@
             if (scaleRatio < 1) {
                 svgD3.style("transform", `scale(${scaleRatio})`);
                 svgD3.style("transform-origin", "top left");
-                //   svgElem.style.transform = `scale(${scaleRatio})`;
+                svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+                svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
             }
 
-            svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
-            svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
 
 
 
@@ -343,7 +342,7 @@
                                                         }
                             row++;
                         }
-                        
+
                         for (let i = 0; i < number_nodes; i++) {
                             new Arrow(nodes[row][indices[i]], output_nodes[i]).draw();
                         }
