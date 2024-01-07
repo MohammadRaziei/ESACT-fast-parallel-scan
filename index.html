@@ -34,12 +34,13 @@
             <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank"
                 rel="noopener noreferrer" class="github-logo">
                 <div class="inline flex-col relative">
-                    <i class="fab fa-github fa-2x flex"></i> 
+                    <i class="fab fa-github fa-2x flex"></i>
                     <span class="">
                         Github Repo
-                    </span> 
+                    </span>
                 </div>
-                <img class="flex" src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social"/>
+                <img class="flex"
+                    src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
             </a>
         </div>
         <div class="container my-4">
@@ -244,9 +245,16 @@
         create_svg(parseInt(input.value));
 
 
-        addEventListener("resize", () => {
-            create_svg(parseInt(input.value));
-        });
+
+        var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
+        var isDesktop = window.screenX != 0 && !isTouchDevice() ? true : false;
+
+        console.log(isDesktop?"Desktop Mode": "Mobile Mode")
+        if (isDesktop) {
+            addEventListener("resize", () => {
+                create_svg(parseInt(input.value));
+            });
+        }
 
 
 
