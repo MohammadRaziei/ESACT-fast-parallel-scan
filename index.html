@@ -249,18 +249,18 @@
                 new Node(i * (Node.width), (number_of_steps + 1) * (Node.height * 2), "aquamarine", `Y_${i}`).draw()
             );
 
-            const totalwidth = (Node.width + 1) * number_nodes;
+            const totalwidth = (Node.width) * number_nodes+2;
             const totalheight = (Node.height * 2) * (number_of_steps + 2) - Node.height + 2;
 
 
+            svgElem.setAttribute("width", totalwidth + 'px');
+            svgElem.setAttribute("height", totalheight + 'px');
 
-            svgD3.style("width", totalwidth + 'px')
-                .style("height", totalheight + 'px');
+            // svgD3.style("width", totalwidth + 'px').style("height", totalheight + 'px');
 
 
 
 
-            // svgD3.style("transform", "scale(0.5) translate(-100%, -100%)");
 
 
 
@@ -385,6 +385,7 @@
 
 
         function saveSvg(svgEl, name) {
+            svgEl.style.transform = null;
             svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
             var svgData = svgEl.outerHTML;
             var preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -399,7 +400,7 @@
         }
 
         function onSaveBtn() {
-            saveSvg(svgElem, 'graph.svg');
+            saveSvg(svgElem.cloneNode(true), 'graph.svg');
         }
 
 
