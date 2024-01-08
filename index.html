@@ -68,11 +68,20 @@
 
 
 
-                <div class="w-full mt-5 overflow-hidden">
+                <div class="w-full my-5 overflow-hidden">
                     <div class="m-0">
                         <svg id="canvas"></svg>
                     </div>
                 </div>
+
+                <button
+                    class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+                    onclick="onSaveBtn()">
+                    save
+                </button>
+
+
+
             </div>
         </div>
     </div>
@@ -87,8 +96,10 @@
 
         var svgD3 = d3.select("svg#canvas").attr("preserveAspectRatio", "xMinYMin meet");
 
+        const svgElem = document.getElementById('canvas');
 
         // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
+
 
 
         function Text(x, y, text) {
@@ -184,16 +195,16 @@
 
 
         function createIndices(n) {
-  let omega = [];
-  omega[0] = n - 1;
+            let omega = [];
+            omega[0] = n - 1;
 
-  for (let i = 0; 2 * i + 1 < n; i++) {
-    omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
-    omega[2 * i + 1] = Math.floor(omega[i] / 2);
-  }
+            for (let i = 0; 2 * i + 1 < n; i++) {
+                omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
+                omega[2 * i + 1] = Math.floor(omega[i] / 2);
+            }
 
-  return omega;
-}
+            return omega;
+        }
 
 
 
@@ -239,14 +250,12 @@
             );
 
             const totalwidth = (Node.width + 1) * number_nodes;
-            const totalheight = (Node.height * 2) * (number_of_steps + 2);
+            const totalheight = (Node.height * 2) * (number_of_steps + 2) - Node.height + 2;
 
 
 
             svgD3.style("width", totalwidth + 'px')
                 .style("height", totalheight + 'px');
-
-            let svgElem = document.getElementById('canvas');
 
 
 
@@ -276,7 +285,7 @@
 
                     {
                         for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(input_nodes[i], nodes[0][i]).draw();
+                            new Arrow(input_nodes[i], nodes[0][i], "darkcyan").draw();
                         }
 
                         let row = 0
@@ -298,13 +307,13 @@
                             for (let i = 0; i < number_nodes / s; i++) {
                                 new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
                                 new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
-                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1], "darkgreen").draw();
+                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1], "mediumvioletred").draw();
                             }
                             row++;
                         }
 
                         for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(nodes[number_nodes - 1][i], output_nodes[i]).draw();
+                            new Arrow(nodes[number_nodes - 1][i], output_nodes[i], "darkcyan").draw();
                         }
 
                     }
@@ -312,10 +321,10 @@
                     break;
                 case "esact":
                     {
-                        
+
                         const indices = createIndices(number_nodes);
                         for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(input_nodes[i], nodes[0][indices[i]]).draw();
+                            new Arrow(input_nodes[i], nodes[0][indices[i]], "darkcyan").draw();
                         }
 
                         let row = 0
@@ -328,7 +337,7 @@
                         }
                         const sum_node = nodes[row++][0];
                         new Arrow(sum_node, nodes[row][0], "red").draw();
-                        sum_node.elem.attr("fill", "lightcyan"); 
+                        sum_node.elem.attr("fill", "lightcyan");
                         sum_node.addText("Sum");
                         nodes[row][0].addText("0");
 
@@ -339,12 +348,13 @@
                             for (let i = 0; i < s; i++) {
                                 new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
                                 new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
-                                                        }
+                                new Arrow(nodes[row][i], nodes[row + 1][i + s], "mediumvioletred").draw();
+                            }
                             row++;
                         }
 
                         for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(nodes[row][indices[i]], output_nodes[i]).draw();
+                            new Arrow(nodes[row][indices[i]], output_nodes[i], "darkcyan").draw();
                         }
                     } break;
                 default:
@@ -368,11 +378,29 @@
         // console.log(isDesktop?"Desktop Mode": "Mobile Mode")
         // if (isDesktop) {
         addEventListener("resize", () => {
-            console.log("resize")
             create_svg(parseInt(input.value));
         });
         // }
 
+
+
+        function saveSvg(svgEl, name) {
+            svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            var svgData = svgEl.outerHTML;
+            var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+            var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+            var svgUrl = URL.createObjectURL(svgBlob);
+            var downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = name;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        function onSaveBtn() {
+            saveSvg(svgElem, 'graph.svg');
+        }
 
 
 
