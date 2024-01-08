@@ -237,7 +237,7 @@
 
             var nodes = Array.from({ length: number_of_steps }, (_, col) =>
                 Array.from({ length: number_nodes }, (_, row) =>
-                    new Node(row * (Node.width), (col + 1) * (Node.height * 2)).draw()
+                    new Node(row * (Node.width), (col + 1.5) * (Node.height * 2)).draw()
                 )
             );
 
@@ -246,11 +246,11 @@
             );
 
             var output_nodes = Array.from({ length: number_nodes }, (_, i) =>
-                new Node(i * (Node.width), (number_of_steps + 1) * (Node.height * 2), "aquamarine", `Y_${i}`).draw()
+                new Node(i * (Node.width), (number_of_steps + 2) * (Node.height * 2) , "aquamarine", `Y_${i}`).draw()
             );
 
             const totalwidth = (Node.width) * number_nodes+2;
-            const totalheight = (Node.height * 2) * (number_of_steps + 2) - Node.height + 2;
+            const totalheight = (Node.height * 2) * (number_of_steps + 2.5) + 2;
 
 
             svgElem.setAttribute("width", totalwidth + 'px');
@@ -286,6 +286,7 @@
                     {
                         for (let i = 0; i < number_nodes; i++) {
                             new Arrow(input_nodes[i], nodes[0][i], "darkcyan").draw();
+                            nodes[0][i].addText(`X_${i}`)
                         }
 
                         let row = 0
@@ -299,7 +300,7 @@
                         const sum_node = nodes[row++][number_nodes - 1];
                         new Arrow(sum_node, nodes[row][number_nodes - 1], "red").draw();
                         sum_node.elem.attr("fill", "lightcyan");
-                        sum_node.addText("Sum");
+                        if(number_nodes > 1) sum_node.addText("Sum");
                         nodes[row][number_nodes - 1].addText("0");
 
 
@@ -325,6 +326,7 @@
                         const indices = createIndices(number_nodes);
                         for (let i = 0; i < number_nodes; i++) {
                             new Arrow(input_nodes[i], nodes[0][indices[i]], "darkcyan").draw();
+                            nodes[0][i].addText(`X_${indices[i]}`)
                         }
 
                         let row = 0
@@ -338,7 +340,7 @@
                         const sum_node = nodes[row++][0];
                         new Arrow(sum_node, nodes[row][0], "red").draw();
                         sum_node.elem.attr("fill", "lightcyan");
-                        sum_node.addText("Sum");
+                        if(number_nodes > 1) sum_node.addText("Sum");
                         nodes[row][0].addText("0");
 
 
