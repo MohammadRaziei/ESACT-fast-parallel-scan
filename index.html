@@ -62,10 +62,16 @@
 
 
                 <div class="flex-inline">
-                    <label for="inputNumberOfNodes">Choose a Algorithm:</label>
+                    <label for="inputNumberOfNodes">Choose a value:</label>
                     <input id="inputNumberOfNodes" value="8" type="number"
-                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-28">
+                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
                 </div>
+
+                <button
+                class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+                onclick="onApplyBtn()">
+                Apply
+            </button>
 
 
 
@@ -78,7 +84,7 @@
                 <button
                     class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
                     onclick="onSaveBtn()">
-                    save
+                    Save
                 </button>
 
 
@@ -208,6 +214,23 @@
         }
 
 
+        function scale_svg(number_nodes){
+            const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2
+            const totalwidth = (Node.width) * number_nodes+2;
+            const totalheight = (Node.height * 2) * (number_of_steps + 2.5) + 2;
+
+                        // JavaScript code to scale the SVG if width is larger
+            const svgMaxWidth = svgElem.parentElement.clientWidth;
+            const svgClientWidth = svgElem.clientWidth
+            const scaleRatio = svgMaxWidth / svgClientWidth;
+            if (scaleRatio < 1) {
+                svgD3.style("transform", `scale(${scaleRatio})`);
+                svgD3.style("transform-origin", "top left");
+                svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+                svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+            }
+        }
+
 
         function create_svg(number_nodes) {
 
@@ -229,7 +252,7 @@
 
 
 
-            const number_of_steps = Math.floor(Math.log2(number_nodes) + 1) * 2
+            const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2
 
 
 
@@ -258,27 +281,6 @@
             svgElem.setAttribute("height", totalheight + 'px');
 
             // svgD3.style("width", totalwidth + 'px').style("height", totalheight + 'px');
-
-
-
-
-
-
-
-
-            // JavaScript code to scale the SVG if width is larger
-            const svgMaxWidth = svgElem.parentElement.clientWidth;
-            const svgClientWidth = svgElem.clientWidth
-            const scaleRatio = svgMaxWidth / svgClientWidth;
-            if (scaleRatio < 1) {
-                svgD3.style("transform", `scale(${scaleRatio})`);
-                svgD3.style("transform-origin", "top left");
-                svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
-                svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
-            }
-
-
-
 
 
             switch (selectAlg.value) {
@@ -363,16 +365,31 @@
                 default:
                     console.log("error");
             }
+
+            scale_svg(number_nodes)
         }
 
         input.addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 event.preventDefault();
-                create_svg(parseInt(input.value));
+                onApplyBtn();
             }
         });
-        create_svg(parseInt(input.value));
 
+        function isPowerTwo(num){
+            return Math.abs(2**Math.round(Math.log2(num)) - num) < 1e-3
+        }
+
+        function onApplyBtn(){
+            const numnodes = parseInt(input.value);
+            if(isPowerTwo(numnodes)){
+                create_svg(numnodes);
+            } else {
+                alert("Enter power of two");
+            }
+        }
+
+        onApplyBtn();
 
 
         // var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
@@ -381,14 +398,14 @@
         // console.log(isDesktop?"Desktop Mode": "Mobile Mode")
         // if (isDesktop) {
         addEventListener("resize", () => {
-            create_svg(parseInt(input.value));
+            scale_svg(parseInt(input.value));
         });
         // }
 
 
 
         function saveSvg(svgEl, name) {
-            svgEl.style.transform = null;
+            svgEl.style = null;
             svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
             var svgData = svgEl.outerHTML;
             var preface = '<?xml version="1.0" standalone="no"?>\r\n';
