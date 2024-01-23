@@ -479,7 +479,7 @@
     const svgMatrixD3 = d3.select("svg#matrix");
     const svgMatrixElem = document.getElementById('matrix');
 
-    function scale_svg(number_nodes){
+    function scale_svg_matrix(number_nodes){
             const totalwidth = 53 * (number_nodes+1) + 40;
             const totalheight = 51 * (number_nodes+1);
 
@@ -580,7 +580,7 @@
         .attr("y2", matrixSize * 50 + 50)
         .attr("class", "vertical-line");
 
-        scale_svg(matrixSize);
+        scale_svg_matrix(matrixSize);
 
     }
 
