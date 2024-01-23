@@ -29,7 +29,7 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="container">
+    <div class="">
         <div class="github-logo">
             <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer">
                 <div class="inline flex-col relative">
@@ -44,7 +44,7 @@
                 </div>
             </a>
         </div>
-        <div class="container my-4">
+        <div class="my-4">
             <div class="p-4">
 
                 <h3 class="text-2xl font-bold mb-4 mt-12">Prefix Sum Algorithm's Graph</h3>
@@ -428,6 +428,298 @@
 
         // });
     </script>
+
+
+
+
+
+
+<div class="p-4">
+
+    <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Permutation Matrix</h3>
+    <p class="mb-4">Please input the power of two.</p>
+
+
+    <div class="flex-inline">
+        <label for="inputMatrix">Choose a value:</label>
+        <input id="inputMatrix" value="8" type="number"
+            class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
+    </div>
+
+    <button
+    class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+    onclick="onApplyMatrixBtn()">
+    Apply
+</button>
+
+
+
+    <div class="w-full my-5 overflow-hidden">
+        <div class="m-0">
+            <svg id="matrix"></svg>
+        </div>
+    </div>
+
+    <button
+        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+        onclick="onSaveMatrixBtn()">
+        Save
+    </button>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+    const svgMatrixD3 = d3.select("svg#matrix");
+    const svgMatrixElem = document.getElementById('matrix');
+
+
+    function createPermutationMatrix(indices) {
+        svgMatrixD3.selectAll("*").remove();
+      // Define the size of the matrix based on the length of indices array
+      const matrixSize = indices.length;
+      
+
+      // Create the SVG container
+      svgMatrixD3.attr("width", matrixSize * 50 + 50)
+        .attr("height", matrixSize * 50 + 50)
+        .attr("style", "background-color: #f2f2f2;");
+
+      // Create a matrix of rectangles
+      const matrix = svgMatrixD3.selectAll("rect")
+        .data(indices)
+        .enter()
+        .append("rect")
+        .attr("style", "fill: turquoise; stroke: black; stroke-width: 1px;")
+        .attr("x", (d, i) => i * 50 + 50)
+        .attr("y", (d) => d * 50 + 50)
+        .attr("width", 50)
+        .attr("height", 50);
+
+      // Add text labels to the matrix cells
+      const labels = svgMatrixD3.selectAll("text")
+        .data(indices)
+        .enter()
+        .append("text")
+        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
+        .attr("x", (d, i) => i * 50 + 75)
+        .attr("y", (d) => d * 50 + 75)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .text((i, j) => `${i},${j}`);
+
+      // Add x-axis labels
+      const xAxisLabels = svgMatrixD3.selectAll(".x-axis-label")
+        .data(indices)
+        .enter()
+        .append("text")
+        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
+        .attr("x", (d, i) => i * 50 + 75)
+        .attr("y", 25)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .text((d, i) => i);
+
+      // Add y-axis labels
+      const yAxisLabels = svgMatrixD3.selectAll(".y-axis-label")
+        .data(indices)
+        .enter()
+        .append("text")
+        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
+        .attr("x", 25)
+        .attr("y", (d, i) => i * 50 + 75)
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .text((d, i) => i);
+
+      // Add horizontal grid lines
+      const horizontalLines = svgMatrixD3.selectAll(".horizontal-line")
+        .data(indices)
+        .enter()
+        .append("line")
+        .attr("style", "stroke: #ccc; stroke-width: 1px;")
+        .attr("x1", 50)
+        .attr("y1", (d, i) => i * 50 + 50)
+        .attr("x2", matrixSize * 50 + 50)
+        .attr("y2", (d, i) => i * 50 + 50)
+        .attr("class", "horizontal-line");
+
+      // Add vertical grid lines
+      const verticalLines = svgMatrixD3.selectAll(".vertical-line")
+        .data(indices)
+        .enter()
+        .append("line")
+        .attr("style", "stroke: #ccc; stroke-width: 1px;")
+        .attr("x1", (d, i) => i * 50 + 50)
+        .attr("y1", 50)
+        .attr("x2", (d, i) => i * 50 + 50)
+        .attr("y2", matrixSize * 50 + 50)
+        .attr("class", "vertical-line");
+    }
+
+    // Example usage with an array of indices
+
+
+    function createIndices(n) {
+            let omega = [];
+            omega[0] = n - 1;
+
+            for (let i = 0; 2 * i + 1 < n; i++) {
+                omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
+                omega[2 * i + 1] = Math.floor(omega[i] / 2);
+            }
+
+            return omega;
+        }
+
+        function isPowerTwo(num){
+            return Math.abs(2**Math.round(Math.log2(num)) - num) < 1e-3
+        }
+
+        const inputMatrix = document.getElementById("inputMatrix");
+
+        function onApplyMatrixBtn(){
+            const numnodes = parseInt(inputMatrix.value);
+            if(isPowerTwo(numnodes)){
+                createPermutationMatrix(createIndices(numnodes));
+            } else {
+                alert("Enter power of two");
+            }
+        }
+
+        inputMatrix.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                onApplyMatrixBtn();
+            }
+        });
+
+        function onSaveMatrixBtn() {
+            saveSvg(svgMatrixElem.cloneNode(true), 'matrix.svg');
+        }
+
+
+        onApplyMatrixBtn();
+</script>
+
+
+
+
+<div class="p-4">
+
+    <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Indices</h3>
+    <p class="mb-4">Please input the power of two.</p>
+
+
+    <div class="flex-inline">
+        <label for="inputArray">Choose a value:</label>
+        <input id="inputArray" value="8" type="number"
+            class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
+    </div>
+
+    <button
+        class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
+        onclick="onApplyArrayBtn()">
+        Apply
+    </button>
+
+
+
+    <div class="px-4">
+        <div id="array-table" class="overflow-x-auto">
+            <!-- Table will be inserted here -->
+        </div>
+        
+    </div>
+
+    <br/>
+    <button
+        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-gray-500 hover:bg-gray-700 text-white font-bold"
+        onclick="onCopyBtn()">
+        Copy to clipboard
+    </button>
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+
+    function copyArrayToClipboard(arr) {
+        const textToCopy = arr.join(','); // Join the array elements with a comma
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            console.log('Array copied to clipboard');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+    // Function to create a table from an array
+    function createTableFromArray(arr) {
+        const table = document.createElement('table');
+        table.classList.add('table-auto', 'w-40', 'text-left', 'shadow-md', 'bg-white', 'content-start');
+
+        // Create header row
+        const thead = table.createTHead();
+        thead.classList.add('bg-blue-500', 'text-white', 'content-center', 'h-10');
+        const headerRow = thead.insertRow();
+        const thIndex = document.createElement('th');
+        thIndex.textContent = 'Index';
+        const thValue = document.createElement('th');
+        thValue.textContent = 'Value';
+        headerRow.appendChild(thIndex);
+        headerRow.appendChild(thValue);
+
+        // Create body of the table
+        const tbody = table.createTBody();
+        arr.forEach((value, index) => {
+            const row = tbody.insertRow();
+            const cellIndex = row.insertCell();
+            const cellValue = row.insertCell();
+            cellIndex.textContent = index;
+            cellValue.textContent = value;
+            cellIndex.classList.add('p-3');
+            cellValue.classList.add('p-3');
+        });
+
+        return table;
+    }
+
+
+    
+    function onApplyArrayBtn() {
+        const tableElem = document.getElementById('array-table');
+        while (tableElem.firstChild) {
+            tableElem.removeChild(tableElem.firstChild);
+        }
+        tableElem.appendChild(
+            createTableFromArray(createIndices(
+                document.getElementById('inputArray').value
+            )));
+
+        }
+    // Append the table to the div
+
+    function onCopyBtn() {
+        copyArrayToClipboard(createIndices(
+            document.getElementById('inputArray').value
+        ));
+    }
+
+    onApplyArrayBtn();
+
+</script>
+
 </body>
 
 </html>
