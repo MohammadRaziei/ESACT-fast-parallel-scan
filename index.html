@@ -479,11 +479,29 @@
     const svgMatrixD3 = d3.select("svg#matrix");
     const svgMatrixElem = document.getElementById('matrix');
 
+    function scale_svg(number_nodes){
+            const totalwidth = 53 * (number_nodes+1) + 40;
+            const totalheight = 51 * (number_nodes+1);
+
+                        // JavaScript code to scale the SVG if width is larger
+            const svgMaxWidth = svgMatrixElem.parentElement.clientWidth;
+            const svgClientWidth = svgMatrixElem.clientWidth
+            const scaleRatio = svgMaxWidth / svgClientWidth;
+            if (scaleRatio < 1) {
+                svgMatrixD3.style("transform", `scale(${scaleRatio})`);
+                svgMatrixD3.style("transform-origin", "top left");
+                svgMatrixElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+                svgMatrixElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+            }
+        }
+
+
 
     function createPermutationMatrix(indices) {
         svgMatrixD3.selectAll("*").remove();
       // Define the size of the matrix based on the length of indices array
       const matrixSize = indices.length;
+
       
 
       // Create the SVG container
@@ -561,6 +579,9 @@
         .attr("x2", (d, i) => i * 50 + 50)
         .attr("y2", matrixSize * 50 + 50)
         .attr("class", "vertical-line");
+
+        scale_svg(matrixSize);
+
     }
 
     // Example usage with an array of indices
