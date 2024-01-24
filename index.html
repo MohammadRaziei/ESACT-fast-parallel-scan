@@ -1,746 +1,635 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <title>Prefix Sum Algorithm</title>
 
-<head>
-    <title>Prefix Sum Algorithm</title>
+        <meta charset="UTF-8" />
 
-    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <!-- Include Tailwind CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+        <!-- Include Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+        <!-- Add custom styles for GitHub repository page -->
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Include Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Add custom styles for GitHub repository page -->
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
+            .github-logo {
+                position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 10;
+            }
+        </style>
+    </head>
 
-        .github-logo {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 10;
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-    <div class="">
-        <div class="github-logo">
-            <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer">
-                <div class="inline flex-col relative">
-                    <i class="fab fa-github fa-2x flex"></i>
-                    <span class="">
-                        Github Repository
-                    </span>
-                </div>
-                <div class="flex">
-                    <img class="inline mr-2" src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
-                    <img class="inline" src="https://img.shields.io/github/forks/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
-                </div>
-            </a>
-        </div>
-        <div class="my-4">
-            <div class="p-4">
-
-                <h3 class="text-2xl font-bold mb-4 mt-12">Prefix Sum Algorithm's Graph</h3>
-                <p class="mb-4">Please input the power of two.</p>
-
-
-                <div class="flex-inline">
-                    <label for="selectAlgorithms">Choose a Algorithm:</label>
-                    <select name="selectAlgorithms" id="selectAlgorithms"
-                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
-                        <option value="blelloch">Blelloch</option>
-                        <option value="esact" selected="selected">ESACT</option>
-                    </select>
-                </div>
-
-
-                <div class="flex-inline">
-                    <label for="inputNumberOfNodes">Choose a value:</label>
-                    <input id="inputNumberOfNodes" value="8" type="number"
-                        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
-                </div>
-
-                <button
-                class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-                onclick="onApplyBtn()">
-                Apply
-            </button>
-
-
-
-                <div class="w-full my-5 overflow-hidden">
-                    <div class="m-0">
-                        <svg id="canvas"></svg>
+    <body class="bg-gray-100">
+        <div class="">
+            <div class="github-logo">
+                <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer">
+                    <div class="inline flex-col relative">
+                        <i class="fab fa-github fa-2x flex"></i>
+                        <span class="">
+                            Github Repository
+                        </span>
                     </div>
+                    <div class="flex">
+                        <img class="inline mr-2" src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
+                        <img class="inline" src="https://img.shields.io/github/forks/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
+                    </div>
+                </a>
+            </div>
+            <div class="my-4">
+                <div class="p-4">
+                    <h3 class="text-2xl font-bold mb-4 mt-12">Prefix Sum Algorithm's Graph</h3>
+                    <p class="mb-4">Please input the power of two.</p>
+
+                    <div class="flex-inline">
+                        <label for="selectAlgorithms">Choose a Algorithm:</label>
+                        <select name="selectAlgorithms" id="selectAlgorithms" class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
+                            <option value="blelloch">Blelloch</option>
+                            <option value="esact" selected="selected">ESACT</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-inline">
+                        <label for="inputNumberOfNodes">Choose a value:</label>
+                        <input id="inputNumberOfNodes" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
+                    </div>
+
+                    <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyBtn()">
+                        Apply
+                    </button>
+
+                    <div class="w-full my-5 overflow-hidden">
+                        <div class="m-0">
+                            <svg id="canvas"></svg>
+                        </div>
+                    </div>
+
+                    <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onSaveBtn()">
+                        Save
+                    </button>
                 </div>
-
-                <button
-                    class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-                    onclick="onSaveBtn()">
-                    Save
-                </button>
-
-
-
             </div>
         </div>
-    </div>
 
-    <script>
-        // window.addEventListener('DOMContentLoaded', () => {
-        const input = document.getElementById('inputNumberOfNodes');
+        <script>
+            // window.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById("inputNumberOfNodes");
 
-        // Your D3.js code to fill the SVG goes here
+            // Your D3.js code to fill the SVG goes here
 
+            var svgD3 = d3.select("svg#canvas").attr("preserveAspectRatio", "xMinYMin meet");
 
+            const svgElem = document.getElementById("canvas");
 
-        var svgD3 = d3.select("svg#canvas").attr("preserveAspectRatio", "xMinYMin meet");
+            // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
 
-        const svgElem = document.getElementById('canvas');
-
-        // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
-
-
-
-        function Text(x, y, text) {
-            this.x = x;
-            this.y = y;
-            this.text = text;
-
-
-            if (this.text !== "") {
-                this.elem = svgD3.append("text")
-                    .attr("x", this.x)
-                    .attr("y", this.y)
-                    .attr("text-anchor", "middle")
-                    .attr("dominant-baseline", "central")
-                    .text(this.text);
-            }
-
-            // Return a reference to the rectangle for future use
-            return this;
-
-
-
-        }
-
-
-        // Node component representing a rectangle
-        class Node {
-            static width = 100;
-            static height = 50;
-
-            constructor(x, y, colorfill = "powderblue", text = "") {
+            function Text(x, y, text) {
                 this.x = x;
                 this.y = y;
-                this.colorfill = colorfill;
-                this.width = Node.width;
-                this.height = Node.height;
                 this.text = text;
-            }
 
-            draw() {
-                this.elem = svgD3.append("rect")
-                    .attr("x", this.x)
-                    .attr("y", this.y)
-                    .attr("width", this.width)
-                    .attr("height", this.height)
-                    .attr("stroke", "black")
-                    .attr("fill", this.colorfill);
+                if (this.text !== "") {
+                    this.elem = svgD3.append("text").attr("x", this.x).attr("y", this.y).attr("text-anchor", "middle").attr("dominant-baseline", "central").text(this.text);
+                }
 
-                this.addText(this.text);
-
-                // Return self for method chaining
+                // Return a reference to the rectangle for future use
                 return this;
             }
 
-            addText(text) {
-                Text(this.x + this.width / 2, this.y + this.height / 2, text);
-            }
+            // Node component representing a rectangle
+            class Node {
+                static width = 100;
+                static height = 50;
 
+                constructor(x, y, colorfill = "powderblue", text = "") {
+                    this.x = x;
+                    this.y = y;
+                    this.colorfill = colorfill;
+                    this.width = Node.width;
+                    this.height = Node.height;
+                    this.text = text;
+                }
 
-            getBottomCenter() {
-                return { x: this.x + this.width / 2, y: this.y + this.height };
-            }
+                draw() {
+                    this.elem = svgD3.append("rect").attr("x", this.x).attr("y", this.y).attr("width", this.width).attr("height", this.height).attr("stroke", "black").attr("fill", this.colorfill);
 
-            getTopCenter() {
-                return { x: this.x + this.width / 2, y: this.y };
-            }
-        }
+                    this.addText(this.text);
 
-        // Arrow component to draw an arrow between two nodes
-        class Arrow {
-            constructor(fromNode, toNode, color = "black") {
+                    // Return self for method chaining
+                    return this;
+                }
 
+                addText(text) {
+                    Text(this.x + this.width / 2, this.y + this.height / 2, text);
+                }
 
-                this.draw = function () {
-                    var start = fromNode.getBottomCenter();
-                    var end = toNode.getTopCenter();
+                getBottomCenter() {
+                    return { x: this.x + this.width / 2, y: this.y + this.height };
+                }
 
-                    const calcX = (n1, n2) => {
-                        const tmp = .95 * n1.x + .05 * n2.x;
-                        return Math.max(Math.min(tmp, n1.x + Node.width * .3), n1.x - Node.width * .3);
-                    };
-                    svgD3.append("line")
-                        .attr("x1", calcX(start, end))
-                        .attr("y1", start.y)
-                        .attr("x2", calcX(end, start))
-                        .attr("y2", end.y - 1)
-                        .attr("stroke", color)
-                        .attr("stroke-width", 2)
-                        .attr("marker-end", "url(#arrow)");
+                getTopCenter() {
+                    return { x: this.x + this.width / 2, y: this.y };
                 }
             }
-        }
 
+            // Arrow component to draw an arrow between two nodes
+            class Arrow {
+                constructor(fromNode, toNode, color = "black") {
+                    this.draw = function () {
+                        var start = fromNode.getBottomCenter();
+                        var end = toNode.getTopCenter();
 
-        function createIndices(n) {
-            let omega = [];
-            omega[0] = n - 1;
-
-            for (let i = 0; 2 * i + 1 < n; i++) {
-                omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
-                omega[2 * i + 1] = Math.floor(omega[i] / 2);
+                        const calcX = (n1, n2) => {
+                            const tmp = 0.95 * n1.x + 0.05 * n2.x;
+                            return Math.max(Math.min(tmp, n1.x + Node.width * 0.3), n1.x - Node.width * 0.3);
+                        };
+                        svgD3
+                            .append("line")
+                            .attr("x1", calcX(start, end))
+                            .attr("y1", start.y)
+                            .attr("x2", calcX(end, start))
+                            .attr("y2", end.y - 1)
+                            .attr("stroke", color)
+                            .attr("stroke-width", 2)
+                            .attr("marker-end", "url(#arrow)");
+                    };
+                }
             }
 
-            return omega;
-        }
+            function createIndices(n) {
+                let omega = [];
+                omega[0] = n - 1;
 
+                for (let i = 0; 2 * i + 1 < n; i++) {
+                    omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
+                    omega[2 * i + 1] = Math.floor(omega[i] / 2);
+                }
 
-        function scale_svg(number_nodes){
-            const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2
-            const totalwidth = (Node.width) * number_nodes+2;
-            const totalheight = (Node.height * 2) * (number_of_steps + 2.5) + 2;
-
-                        // JavaScript code to scale the SVG if width is larger
-            const svgMaxWidth = svgElem.parentElement.clientWidth;
-            const svgClientWidth = svgElem.clientWidth
-            const scaleRatio = svgMaxWidth / svgClientWidth;
-            if (scaleRatio < 1) {
-                svgD3.style("transform", `scale(${scaleRatio})`);
-                svgD3.style("transform-origin", "top left");
-                svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
-                svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+                return omega;
             }
-        }
 
+            function scale_svg(number_nodes) {
+                const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2;
+                const totalwidth = Node.width * number_nodes + 2;
+                const totalheight = Node.height * 2 * (number_of_steps + 2.5) + 2;
 
-        function create_svg(number_nodes) {
+                // JavaScript code to scale the SVG if width is larger
+                const svgMaxWidth = svgElem.parentElement.clientWidth;
+                const svgClientWidth = svgElem.clientWidth;
+                const scaleRatio = svgMaxWidth / svgClientWidth;
+                if (scaleRatio < 1) {
+                    svgD3.style("transform", `scale(${scaleRatio})`);
+                    svgD3.style("transform-origin", "top left");
+                    svgElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+                    svgElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+                }
+            }
 
-            svgD3.selectAll("*").remove();
-            // Create the arrow marker definition
-            svgD3.append("svg:defs").append("svg:marker")
-                .attr("id", "arrow")
-                .attr("viewBox", "0 -5 10 10")
-                .attr("refX", 8) // Adjust the refX to offset the arrow to align properly
-                .attr("refY", 0)
-                .attr("markerWidth", 4)
-                .attr("markerHeight", 4)
-                .attr("orient", "auto")
-                .append("svg:path")
-                .attr("d", "M0,-5L10,0L0,5")
-                .attr("fill", "black");
+            function create_svg(number_nodes) {
+                svgD3.selectAll("*").remove();
+                // Create the arrow marker definition
+                svgD3
+                    .append("svg:defs")
+                    .append("svg:marker")
+                    .attr("id", "arrow")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 8) // Adjust the refX to offset the arrow to align properly
+                    .attr("refY", 0)
+                    .attr("markerWidth", 4)
+                    .attr("markerHeight", 4)
+                    .attr("orient", "auto")
+                    .append("svg:path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("fill", "black");
 
-            const selectAlg = document.getElementById("selectAlgorithms");
+                const selectAlg = document.getElementById("selectAlgorithms");
 
+                const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2;
 
+                // Create two instances of the Node component
 
-            const number_of_steps = Math.round(Math.log2(number_nodes) + 1) * 2
+                var nodes = Array.from({ length: number_of_steps }, (_, col) => Array.from({ length: number_nodes }, (_, row) => new Node(row * Node.width, (col + 1.5) * (Node.height * 2)).draw()));
 
+                var input_nodes = Array.from({ length: number_nodes }, (_, i) => new Node(i * Node.width, 0, "aquamarine", `X_${i}`).draw());
 
+                var output_nodes = Array.from({ length: number_nodes }, (_, i) => new Node(i * Node.width, (number_of_steps + 2) * (Node.height * 2), "aquamarine", `Y_${i}`).draw());
 
+                const totalwidth = Node.width * number_nodes + 2;
+                const totalheight = Node.height * 2 * (number_of_steps + 2.5) + 2;
 
-            // Create two instances of the Node component
+                svgElem.setAttribute("width", totalwidth + "px");
+                svgElem.setAttribute("height", totalheight + "px");
 
-            var nodes = Array.from({ length: number_of_steps }, (_, col) =>
-                Array.from({ length: number_nodes }, (_, row) =>
-                    new Node(row * (Node.width), (col + 1.5) * (Node.height * 2)).draw()
-                )
-            );
+                // svgD3.style("width", totalwidth + 'px').style("height", totalheight + 'px');
 
-            var input_nodes = Array.from({ length: number_nodes }, (_, i) =>
-                new Node(i * (Node.width), 0, "aquamarine", `X_${i}`).draw()
-            );
-
-            var output_nodes = Array.from({ length: number_nodes }, (_, i) =>
-                new Node(i * (Node.width), (number_of_steps + 2) * (Node.height * 2) , "aquamarine", `Y_${i}`).draw()
-            );
-
-            const totalwidth = (Node.width) * number_nodes+2;
-            const totalheight = (Node.height * 2) * (number_of_steps + 2.5) + 2;
-
-
-            svgElem.setAttribute("width", totalwidth + 'px');
-            svgElem.setAttribute("height", totalheight + 'px');
-
-            // svgD3.style("width", totalwidth + 'px').style("height", totalheight + 'px');
-
-
-            switch (selectAlg.value) {
-                case "blelloch":
-
-                    {
-                        for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(input_nodes[i], nodes[0][i], "darkcyan").draw();
-                            nodes[0][i].addText(`X_${i}`)
-                        }
-
-                        let row = 0
-                        for (let s = 2; s <= number_nodes; s <<= 1) {
-                            for (let i = 0; i < number_nodes / s; i++) {
-                                new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                switch (selectAlg.value) {
+                    case "blelloch":
+                        {
+                            for (let i = 0; i < number_nodes; i++) {
+                                new Arrow(input_nodes[i], nodes[0][i], "darkcyan").draw();
+                                nodes[0][i].addText(`X_${i}`);
                             }
-                            row++;
-                        }
-                        const sum_node = nodes[row++][number_nodes - 1];
-                        new Arrow(sum_node, nodes[row][number_nodes - 1], "red").draw();
-                        sum_node.elem.attr("fill", "lightcyan");
-                        if(number_nodes > 1) sum_node.addText("Sum");
-                        nodes[row][number_nodes - 1].addText("0");
 
-
-                        for (let s = number_nodes; s > 1; s >>= 1) {
-                            for (let i = 0; i < number_nodes / s; i++) {
-                                new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
-                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
-                                new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1], "mediumvioletred").draw();
+                            let row = 0;
+                            for (let s = 2; s <= number_nodes; s <<= 1) {
+                                for (let i = 0; i < number_nodes / s; i++) {
+                                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                }
+                                row++;
                             }
-                            row++;
-                        }
+                            const sum_node = nodes[row++][number_nodes - 1];
+                            new Arrow(sum_node, nodes[row][number_nodes - 1], "red").draw();
+                            sum_node.elem.attr("fill", "lightcyan");
+                            if (number_nodes > 1) sum_node.addText("Sum");
+                            nodes[row][number_nodes - 1].addText("0");
 
-                        for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(nodes[number_of_steps - 1][i], output_nodes[i], "darkcyan").draw();
-                        }
+                            for (let s = number_nodes; s > 1; s >>= 1) {
+                                for (let i = 0; i < number_nodes / s; i++) {
+                                    new Arrow(nodes[row][s * i + Math.floor(s / 2) - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + s - 1]).draw();
+                                    new Arrow(nodes[row][s * i + s - 1], nodes[row + 1][s * i + Math.floor(s / 2) - 1], "mediumvioletred").draw();
+                                }
+                                row++;
+                            }
 
+                            for (let i = 0; i < number_nodes; i++) {
+                                new Arrow(nodes[number_of_steps - 1][i], output_nodes[i], "darkcyan").draw();
+                            }
+                        }
+                        // code block
+                        break;
+                    case "esact":
+                        {
+                            const indices = createIndices(number_nodes);
+                            for (let i = 0; i < number_nodes; i++) {
+                                new Arrow(input_nodes[i], nodes[0][indices[i]], "darkcyan").draw();
+                                nodes[0][i].addText(`X_${indices[i]}`);
+                            }
+
+                            let row = 0;
+                            for (let s = number_nodes >> 1; s > 0; s >>= 1) {
+                                for (let i = 0; i < s; i++) {
+                                    new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
+                                    new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
+                                }
+                                row++;
+                            }
+                            const sum_node = nodes[row++][0];
+                            new Arrow(sum_node, nodes[row][0], "red").draw();
+                            sum_node.elem.attr("fill", "lightcyan");
+                            if (number_nodes > 1) sum_node.addText("Sum");
+                            nodes[row][0].addText("0");
+
+                            for (let s = 1; s < number_nodes; s <<= 1) {
+                                for (let i = 0; i < s; i++) {
+                                    new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
+                                    new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
+                                    new Arrow(nodes[row][i], nodes[row + 1][i + s], "mediumvioletred").draw();
+                                }
+                                row++;
+                            }
+
+                            for (let i = 0; i < number_nodes; i++) {
+                                new Arrow(nodes[row][indices[i]], output_nodes[i], "darkcyan").draw();
+                            }
+                        }
+                        break;
+                    default:
+                        console.log("error");
+                }
+
+                scale_svg(number_nodes);
+            }
+
+            input.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    onApplyBtn();
+                }
+            });
+
+            function isPowerTwo(num) {
+                return Math.abs(2 ** Math.round(Math.log2(num)) - num) < 1e-3;
+            }
+
+            function onApplyBtn() {
+                const numnodes = parseInt(input.value);
+                if (isPowerTwo(numnodes)) {
+                    create_svg(numnodes);
+                } else {
+                    alert("Enter power of two");
+                }
+            }
+
+            onApplyBtn();
+
+            // var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
+            // var isDesktop = window.screenX != 0 && !isTouchDevice() ? true : false;
+
+            // console.log(isDesktop?"Desktop Mode": "Mobile Mode")
+            // if (isDesktop) {
+            addEventListener("resize", () => {
+                scale_svg(parseInt(input.value));
+            });
+            // }
+
+            function saveSvg(svgEl, name) {
+                svgEl.style = null;
+                svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+                var svgData = svgEl.outerHTML;
+                var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+                var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
+                var svgUrl = URL.createObjectURL(svgBlob);
+                var downloadLink = document.createElement("a");
+                downloadLink.href = svgUrl;
+                downloadLink.download = name;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+
+            function onSaveBtn() {
+                saveSvg(svgElem.cloneNode(true), "graph.svg");
+            }
+
+            // });
+        </script>
+
+        <div class="p-4">
+            <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Permutation Matrix</h3>
+            <p class="mb-4">Please input the power of two.</p>
+
+            <div class="flex-inline">
+                <label for="inputMatrix">Choose a value:</label>
+                <input id="inputMatrix" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
+            </div>
+
+            <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyMatrixBtn()">
+                Apply
+            </button>
+
+            <div class="w-full my-5 overflow-hidden max-w-xl">
+                <div class="m-0">
+                    <svg id="matrix"></svg>
+                </div>
+            </div>
+
+            <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onSaveMatrixBtn()">
+                Save
+            </button>
+        </div>
+
+        <script>
+            const svgMatrixD3 = d3.select("svg#matrix");
+            const svgMatrixElem = document.getElementById("matrix");
+
+            function scale_svg_matrix(number_nodes) {
+                const totalwidth = 53 * (number_nodes + 1) + 40;
+                const totalheight = 51 * (number_nodes + 1);
+
+                // JavaScript code to scale the SVG if width is larger
+                const svgMaxWidth = svgMatrixElem.parentElement.parentElement.clientWidth;
+                const svgClientWidth = svgMatrixElem.clientWidth;
+                const scaleRatio = svgMaxWidth / svgClientWidth;
+                if (scaleRatio < 1) {
+                    svgMatrixD3.style("transform", `scale(${scaleRatio})`);
+                    svgMatrixD3.style("transform-origin", "top left");
+                    svgMatrixElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
+                    svgMatrixElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
+                }
+            }
+
+            function createPermutationMatrix(indices) {
+                svgMatrixD3.selectAll("*").remove();
+                // Define the size of the matrix based on the length of indices array
+                const matrixSize = indices.length;
+
+                // Create the SVG container
+                svgMatrixD3
+                    .attr("width", matrixSize * 50 + 50)
+                    .attr("height", matrixSize * 50 + 50)
+                    .attr("style", "background-color: #f2f2f2;");
+
+                // Create a matrix of rectangles
+                const matrix = svgMatrixD3
+                    .selectAll("rect")
+                    .data(indices)
+                    .enter()
+                    .append("rect")
+                    .attr("style", "fill: #333; stroke: black; stroke-width: 1px;")
+                    .attr("x", (d, i) => i * 50 + 50)
+                    .attr("y", (d) => d * 50 + 50)
+                    .attr("width", 50)
+                    .attr("height", 50);
+
+                // Add text labels to the matrix cells
+                const labels = svgMatrixD3
+                    .selectAll("text")
+                    .data(indices)
+                    .enter()
+                    .append("text")
+                    .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #fff;")
+                    .attr("x", (d, i) => i * 50 + 75)
+                    .attr("y", (d) => d * 50 + 75)
+                    .attr("text-anchor", "middle")
+                    .attr("alignment-baseline", "middle")
+                    .text((i, j) => `${i},${j}`);
+
+                // Add x-axis labels
+                const xAxisLabels = svgMatrixD3
+                    .selectAll(".x-axis-label")
+                    .data(indices)
+                    .enter()
+                    .append("text")
+                    .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
+                    .attr("x", (d, i) => i * 50 + 75)
+                    .attr("y", 25)
+                    .attr("text-anchor", "middle")
+                    .attr("alignment-baseline", "middle")
+                    .text((d, i) => i);
+
+                // Add y-axis labels
+                const yAxisLabels = svgMatrixD3
+                    .selectAll(".y-axis-label")
+                    .data(indices)
+                    .enter()
+                    .append("text")
+                    .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
+                    .attr("x", 25)
+                    .attr("y", (d, i) => i * 50 + 75)
+                    .attr("text-anchor", "middle")
+                    .attr("alignment-baseline", "middle")
+                    .text((d, i) => i);
+
+                // Add horizontal grid lines
+                const horizontalLines = svgMatrixD3
+                    .selectAll(".horizontal-line")
+                    .data(indices)
+                    .enter()
+                    .append("line")
+                    .attr("style", "stroke: #ccc; stroke-width: 1px;")
+                    .attr("x1", 50)
+                    .attr("y1", (d, i) => i * 50 + 50)
+                    .attr("x2", matrixSize * 50 + 50)
+                    .attr("y2", (d, i) => i * 50 + 50)
+                    .attr("class", "horizontal-line");
+
+                // Add vertical grid lines
+                const verticalLines = svgMatrixD3
+                    .selectAll(".vertical-line")
+                    .data(indices)
+                    .enter()
+                    .append("line")
+                    .attr("style", "stroke: #ccc; stroke-width: 1px;")
+                    .attr("x1", (d, i) => i * 50 + 50)
+                    .attr("y1", 50)
+                    .attr("x2", (d, i) => i * 50 + 50)
+                    .attr("y2", matrixSize * 50 + 50)
+                    .attr("class", "vertical-line");
+
+                scale_svg_matrix(matrixSize);
+            }
+
+            // Example usage with an array of indices
+
+            function createIndices(n) {
+                let omega = [];
+                omega[0] = n - 1;
+
+                for (let i = 0; 2 * i + 1 < n; i++) {
+                    omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
+                    omega[2 * i + 1] = Math.floor(omega[i] / 2);
+                }
+
+                return omega;
+            }
+
+            function isPowerTwo(num) {
+                return Math.abs(2 ** Math.round(Math.log2(num)) - num) < 1e-3;
+            }
+
+            const inputMatrix = document.getElementById("inputMatrix");
+
+            function onApplyMatrixBtn() {
+                const numnodes = parseInt(inputMatrix.value);
+                if (isPowerTwo(numnodes)) {
+                    createPermutationMatrix(createIndices(numnodes));
+                } else {
+                    alert("Enter power of two");
+                }
+            }
+
+            inputMatrix.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    onApplyMatrixBtn();
+                }
+            });
+
+            function onSaveMatrixBtn() {
+                saveSvg(svgMatrixElem.cloneNode(true), "matrix.svg");
+            }
+
+            onApplyMatrixBtn();
+        </script>
+
+        <div class="p-4">
+            <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Indices</h3>
+            <p class="mb-4">Please input the power of two.</p>
+
+            <div class="flex-inline">
+                <label for="inputArray">Choose a value:</label>
+                <input id="inputArray" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
+            </div>
+
+            <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyArrayBtn()">
+                Apply
+            </button>
+
+            <div class="px-4 overflow-y-auto w-56" style="max-height: 80vh;">
+                <div id="array-table" class="overflow-x-auto">
+                    <!-- Table will be inserted here -->
+                </div>
+            </div>
+
+            <br />
+            <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-gray-500 hover:bg-gray-700 text-white font-bold" onclick="onCopyBtn()">
+                Copy to clipboard
+            </button>
+        </div>
+
+        <script>
+            function copyArrayToClipboard(arr) {
+                const textToCopy = arr.join(","); // Join the array elements with a comma
+                navigator.clipboard
+                    .writeText(textToCopy)
+                    .then(() => {
+                        console.log("Array copied to clipboard");
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy text: ", err);
+                    });
+            }
+            // Function to create a table from an array
+            function createTableFromArray(arr) {
+                const table = document.createElement("table");
+                table.classList.add("table-auto", "w-40", "text-left", "shadow-md", "bg-white", "content-start");
+
+                // Create header row
+                const thead = table.createTHead();
+                thead.classList.add("bg-gray-800", "text-white", "content-center", "h-10");
+                const headerRow = thead.insertRow();
+                const thIndex = document.createElement("th");
+                thIndex.classList.add("px-4");
+                thIndex.textContent = "Index";
+                const thValue = document.createElement("th");
+                thValue.classList.add("px-4");
+                thValue.textContent = "Value";
+                headerRow.appendChild(thIndex);
+                headerRow.appendChild(thValue);
+
+                // Create body of the table
+                const tbody = table.createTBody();
+                arr.forEach((value, index) => {
+                    const row = tbody.insertRow();
+                    const cellIndex = row.insertCell();
+                    const cellValue = row.insertCell();
+                    cellIndex.textContent = index;
+                    cellValue.textContent = value;
+                    cellIndex.classList.add("p-3");
+                    cellValue.classList.add("p-3");
+                });
+
+                return table;
+            }
+
+            function onApplyArrayBtn() {
+                const numnodes = document.getElementById("inputArray").value;
+                if (isPowerTwo(numnodes)) {
+                    const tableElem = document.getElementById("array-table");
+                    while (tableElem.firstChild) {
+                        tableElem.removeChild(tableElem.firstChild);
                     }
-                    // code block
-                    break;
-                case "esact":
-                    {
+                    tableElem.appendChild(createTableFromArray(createIndices(numnodes)));
+                } else {
+                    alert("Enter power of two");
+                }
+            }
+            // Append the table to the div
 
-                        const indices = createIndices(number_nodes);
-                        for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(input_nodes[i], nodes[0][indices[i]], "darkcyan").draw();
-                            nodes[0][i].addText(`X_${indices[i]}`)
-                        }
-
-                        let row = 0
-                        for (let s = number_nodes >> 1; s > 0; s >>= 1) {
-                            for (let i = 0; i < s; i++) {
-                                new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
-                                new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
-                            }
-                            row++;
-                        }
-                        const sum_node = nodes[row++][0];
-                        new Arrow(sum_node, nodes[row][0], "red").draw();
-                        sum_node.elem.attr("fill", "lightcyan");
-                        if(number_nodes > 1) sum_node.addText("Sum");
-                        nodes[row][0].addText("0");
-
-
-
-
-                        for (let s = 1; s < number_nodes; s <<= 1) {
-                            for (let i = 0; i < s; i++) {
-                                new Arrow(nodes[row][i + s], nodes[row + 1][i]).draw();
-                                new Arrow(nodes[row][i], nodes[row + 1][i]).draw();
-                                new Arrow(nodes[row][i], nodes[row + 1][i + s], "mediumvioletred").draw();
-                            }
-                            row++;
-                        }
-
-                        for (let i = 0; i < number_nodes; i++) {
-                            new Arrow(nodes[row][indices[i]], output_nodes[i], "darkcyan").draw();
-                        }
-                    } break;
-                default:
-                    console.log("error");
+            function onCopyBtn() {
+                copyArrayToClipboard(createIndices(document.getElementById("inputArray").value));
             }
 
-            scale_svg(number_nodes)
-        }
-
-        input.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                onApplyBtn();
-            }
-        });
-
-        function isPowerTwo(num){
-            return Math.abs(2**Math.round(Math.log2(num)) - num) < 1e-3
-        }
-
-        function onApplyBtn(){
-            const numnodes = parseInt(input.value);
-            if(isPowerTwo(numnodes)){
-                create_svg(numnodes);
-            } else {
-                alert("Enter power of two");
-            }
-        }
-
-        onApplyBtn();
-
-
-        // var isTouchDevice = function () { return 'ontouchstart' in window || 'onmsgesturechange' in window; };
-        // var isDesktop = window.screenX != 0 && !isTouchDevice() ? true : false;
-
-        // console.log(isDesktop?"Desktop Mode": "Mobile Mode")
-        // if (isDesktop) {
-        addEventListener("resize", () => {
-            scale_svg(parseInt(input.value));
-        });
-        // }
-
-
-
-        function saveSvg(svgEl, name) {
-            svgEl.style = null;
-            svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-            var svgData = svgEl.outerHTML;
-            var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-            var svgBlob = new Blob([preface, svgData], { type: "image/svg+xml;charset=utf-8" });
-            var svgUrl = URL.createObjectURL(svgBlob);
-            var downloadLink = document.createElement("a");
-            downloadLink.href = svgUrl;
-            downloadLink.download = name;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
-
-        function onSaveBtn() {
-            saveSvg(svgElem.cloneNode(true), 'graph.svg');
-        }
-
-
-
-
-        // });
-    </script>
-
-
-
-
-
-
-<div class="p-4">
-
-    <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Permutation Matrix</h3>
-    <p class="mb-4">Please input the power of two.</p>
-
-
-    <div class="flex-inline">
-        <label for="inputMatrix">Choose a value:</label>
-        <input id="inputMatrix" value="8" type="number"
-            class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
-    </div>
-
-    <button
-    class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-    onclick="onApplyMatrixBtn()">
-    Apply
-</button>
-
-
-
-    <div class="w-full my-5 overflow-hidden max-w-xl">
-        <div class="m-0">
-            <svg id="matrix"></svg>
-        </div>
-    </div>
-
-    <button
-        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-        onclick="onSaveMatrixBtn()">
-        Save
-    </button>
-
-
-
-</div>
-
-
-
-
-
-
-<script>
-    const svgMatrixD3 = d3.select("svg#matrix");
-    const svgMatrixElem = document.getElementById('matrix');
-
-    function scale_svg_matrix(number_nodes){
-            const totalwidth = 53 * (number_nodes+1) + 40;
-            const totalheight = 51 * (number_nodes+1);
-
-                        // JavaScript code to scale the SVG if width is larger
-            const svgMaxWidth = svgMatrixElem.parentElement.parentElement.clientWidth;
-            const svgClientWidth = svgMatrixElem.clientWidth
-            const scaleRatio = svgMaxWidth / svgClientWidth;
-            if (scaleRatio < 1) {
-                svgMatrixD3.style("transform", `scale(${scaleRatio})`);
-                svgMatrixD3.style("transform-origin", "top left");
-                svgMatrixElem.parentElement.style.height = `${totalheight * scaleRatio}px`;
-                svgMatrixElem.parentElement.style.width = `${totalwidth * scaleRatio}px`;
-            }
-        }
-
-
-
-    function createPermutationMatrix(indices) {
-        svgMatrixD3.selectAll("*").remove();
-      // Define the size of the matrix based on the length of indices array
-      const matrixSize = indices.length;
-
-      
-
-      // Create the SVG container
-      svgMatrixD3.attr("width", matrixSize * 50 + 50)
-        .attr("height", matrixSize * 50 + 50)
-        .attr("style", "background-color: #f2f2f2;");
-
-      // Create a matrix of rectangles
-      const matrix = svgMatrixD3.selectAll("rect")
-        .data(indices)
-        .enter()
-        .append("rect")
-        .attr("style", "fill: #333; stroke: black; stroke-width: 1px;")
-        .attr("x", (d, i) => i * 50 + 50)
-        .attr("y", (d) => d * 50 + 50)
-        .attr("width", 50)
-        .attr("height", 50);
-
-      // Add text labels to the matrix cells
-      const labels = svgMatrixD3.selectAll("text")
-        .data(indices)
-        .enter()
-        .append("text")
-        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #fff;")
-        .attr("x", (d, i) => i * 50 + 75)
-        .attr("y", (d) => d * 50 + 75)
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "middle")
-        .text((i, j) => `${i},${j}`);
-
-      // Add x-axis labels
-      const xAxisLabels = svgMatrixD3.selectAll(".x-axis-label")
-        .data(indices)
-        .enter()
-        .append("text")
-        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
-        .attr("x", (d, i) => i * 50 + 75)
-        .attr("y", 25)
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "middle")
-        .text((d, i) => i);
-
-      // Add y-axis labels
-      const yAxisLabels = svgMatrixD3.selectAll(".y-axis-label")
-        .data(indices)
-        .enter()
-        .append("text")
-        .attr("style", "font-family: Arial, sans-serif; font-size: 12px; fill: #333;")
-        .attr("x", 25)
-        .attr("y", (d, i) => i * 50 + 75)
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "middle")
-        .text((d, i) => i);
-
-      // Add horizontal grid lines
-      const horizontalLines = svgMatrixD3.selectAll(".horizontal-line")
-        .data(indices)
-        .enter()
-        .append("line")
-        .attr("style", "stroke: #ccc; stroke-width: 1px;")
-        .attr("x1", 50)
-        .attr("y1", (d, i) => i * 50 + 50)
-        .attr("x2", matrixSize * 50 + 50)
-        .attr("y2", (d, i) => i * 50 + 50)
-        .attr("class", "horizontal-line");
-
-      // Add vertical grid lines
-      const verticalLines = svgMatrixD3.selectAll(".vertical-line")
-        .data(indices)
-        .enter()
-        .append("line")
-        .attr("style", "stroke: #ccc; stroke-width: 1px;")
-        .attr("x1", (d, i) => i * 50 + 50)
-        .attr("y1", 50)
-        .attr("x2", (d, i) => i * 50 + 50)
-        .attr("y2", matrixSize * 50 + 50)
-        .attr("class", "vertical-line");
-
-        scale_svg_matrix(matrixSize);
-
-    }
-
-    // Example usage with an array of indices
-
-
-    function createIndices(n) {
-            let omega = [];
-            omega[0] = n - 1;
-
-            for (let i = 0; 2 * i + 1 < n; i++) {
-                omega[2 * i] = Math.floor((omega[i] + omega[0]) / 2);
-                omega[2 * i + 1] = Math.floor(omega[i] / 2);
-            }
-
-            return omega;
-        }
-
-        function isPowerTwo(num){
-            return Math.abs(2**Math.round(Math.log2(num)) - num) < 1e-3
-        }
-
-        const inputMatrix = document.getElementById("inputMatrix");
-
-        function onApplyMatrixBtn(){
-            const numnodes = parseInt(inputMatrix.value);
-            if(isPowerTwo(numnodes)){
-                createPermutationMatrix(createIndices(numnodes));
-            } else {
-                alert("Enter power of two");
-            }
-        }
-
-        inputMatrix.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                onApplyMatrixBtn();
-            }
-        });
-
-        function onSaveMatrixBtn() {
-            saveSvg(svgMatrixElem.cloneNode(true), 'matrix.svg');
-        }
-
-
-        onApplyMatrixBtn();
-</script>
-
-
-
-
-<div class="p-4">
-
-    <h3 class="text-2xl font-bold mb-4 mt-12">ESACT's Indices</h3>
-    <p class="mb-4">Please input the power of two.</p>
-
-
-    <div class="flex-inline">
-        <label for="inputArray">Choose a value:</label>
-        <input id="inputArray" value="8" type="number"
-            class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36">
-    </div>
-
-    <button
-        class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-        onclick="onApplyArrayBtn()">
-        Apply
-    </button>
-
-
-
-    <div class="px-4 overflow-y-auto w-56" style="max-height: 80vh;">
-        <div id="array-table" class="overflow-x-auto">
-            <!-- Table will be inserted here -->
-        </div>
-        
-    </div>
-
-    <br/>
-    <button
-        class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-gray-500 hover:bg-gray-700 text-white font-bold"
-        onclick="onCopyBtn()">
-        Copy to clipboard
-    </button>
-
-
-
-</div>
-
-
-
-
-<script>
-
-
-
-    function copyArrayToClipboard(arr) {
-        const textToCopy = arr.join(','); // Join the array elements with a comma
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            console.log('Array copied to clipboard');
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-        });
-    }
-    // Function to create a table from an array
-    function createTableFromArray(arr) {
-        const table = document.createElement('table');
-        table.classList.add('table-auto', 'w-40', 'text-left', 'shadow-md', 'bg-white', 'content-start');
-
-        // Create header row
-        const thead = table.createTHead();
-        thead.classList.add('bg-blue-500', 'text-white', 'content-center', 'h-10');
-        const headerRow = thead.insertRow();
-        const thIndex = document.createElement('th');
-        thIndex.textContent = 'Index';
-        const thValue = document.createElement('th');
-        thValue.textContent = 'Value';
-        headerRow.appendChild(thIndex);
-        headerRow.appendChild(thValue);
-
-        // Create body of the table
-        const tbody = table.createTBody();
-        arr.forEach((value, index) => {
-            const row = tbody.insertRow();
-            const cellIndex = row.insertCell();
-            const cellValue = row.insertCell();
-            cellIndex.textContent = index;
-            cellValue.textContent = value;
-            cellIndex.classList.add('p-3');
-            cellValue.classList.add('p-3');
-        });
-
-        return table;
-    }
-
-
-    
-    function onApplyArrayBtn() {
-        const tableElem = document.getElementById('array-table');
-        while (tableElem.firstChild) {
-            tableElem.removeChild(tableElem.firstChild);
-        }
-        tableElem.appendChild(
-            createTableFromArray(createIndices(
-                document.getElementById('inputArray').value
-            )));
-
-        }
-    // Append the table to the div
-
-    function onCopyBtn() {
-        copyArrayToClipboard(createIndices(
-            document.getElementById('inputArray').value
-        ));
-    }
-
-    onApplyArrayBtn();
-
-</script>
-
-</body>
-
+            onApplyArrayBtn();
+        </script>
+    </body>
 </html>
