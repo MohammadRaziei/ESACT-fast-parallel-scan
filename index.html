@@ -454,7 +454,7 @@
 
 
 
-    <div class="w-full my-5 overflow-hidden">
+    <div class="w-full my-5 overflow-hidden max-w-xl">
         <div class="m-0">
             <svg id="matrix"></svg>
         </div>
@@ -484,7 +484,7 @@
             const totalheight = 51 * (number_nodes+1);
 
                         // JavaScript code to scale the SVG if width is larger
-            const svgMaxWidth = svgMatrixElem.parentElement.clientWidth;
+            const svgMaxWidth = svgMatrixElem.parentElement.parentElement.clientWidth;
             const svgClientWidth = svgMatrixElem.clientWidth
             const scaleRatio = svgMaxWidth / svgClientWidth;
             if (scaleRatio < 1) {
