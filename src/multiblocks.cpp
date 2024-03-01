@@ -68,6 +68,8 @@ int main() {
             }
 
 			const double mse = calculateMSE(cpuout_array.data(), gpuout_array.data(), nt);
+			if (mse>.0001) 
+			throw std::runtime_error("mse is too large");
 			printf("MSE: %g\n", mse);
 		}
 	}

@@ -1,5 +1,10 @@
-NVCC = nvcc --use_fast_math -I src -std=c++17 -O0
-#-maxrregcount=0
+NVCC = nvcc -I src -std=c++17 -G --gpu-architecture=sm_52 --use_fast_math 
+# --resource-usage
+# --gpu-architecture=compute_52 --gpu-code=sm_52,compute_52
+# -Xptxas -dlcm=cg 
+# --use_fast_math 
+# --gpu-architecture=sm_52
+# -maxrregcount=0
 all: oneblock multiblocks idx clock-cycle
 
 create_results_folder:
@@ -28,6 +33,9 @@ json: multiblocks create_results_folder
 
 analysis: multiblocks create_results_folder
 	build/multiblocks.out | python tools/multiblocks_analysis.py
+
+analysis-json: multiblocks create_results_folder
+	python tools/multiblocks_analysis.py -i results/multiblocks.json --json
 
 
 

@@ -16,16 +16,10 @@
 
 
 #ifndef SCAN_MEMORY
-#define SCAN_MEMORY GLOBAL_MEMORY
+#define SCAN_MEMORY CONST_MEMORY
 #endif
 
-#if SCAN_MEMORY==GLOBAL_MEMORY
-#pragma message("SCAN_MEMORY==GLOBAL_MEMORY")
-#elif SCAN_MEMORY==CONST_MEMORY
-#pragma message("SCAN_MEMORY==CONST_MEMORY")
-#elif SCAN_MEMORY==CONST_MEMORY2
-#pragma message("SCAN_MEMORY==CONST_MEMORY2")
-#endif
+
 
 typedef uint16_t idx_t;
 struct Indices{idx_t value[1024];};

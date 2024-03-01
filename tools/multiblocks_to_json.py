@@ -46,8 +46,7 @@ def parse_from_arg(input_filename, parser=None):
     if input_filename is not None:
         with open(input_filename, "r") as f:
             log_data = f.read()
-    if log_data is None:
-        if not sys.stdin.isatty():
+    if log_data is None and not sys.stdin.isatty():
             log_data = sys.stdin.read()
     if log_data is None or len(log_data) == 0:
         if parser is not None:

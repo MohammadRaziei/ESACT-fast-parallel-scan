@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define NUM_BANKS 16
-#define LOG_NUM_BANKS 4
+#define NUM_BANKS 32
+#define LOG_NUM_BANKS 5
 #define CONFLICT_FREE_OFFSET(idx) ((idx) >> LOG_NUM_BANKS + (idx) >> (2 * LOG_NUM_BANKS))
 
 
@@ -362,7 +362,7 @@ GpuScan::GpuScan(const size_t size, const int num_threads) : n_max_threads(num_t
 //    idx_t* d_idx = reinterpret_cast<idx_t*>(dev_idx);
     malloc_dev(idx_t , dev_idx, n_max_threads);
 
-    scanReduceIdxKernel<<<1, n_max_threads, n_max_threads*sizeof(int)>>>(dev_idx);
+    scanReduceIdxKernel<<<1, n_max_threads, n_max_threads*sizeof(int)>>>((idx_t*)dev_idx);
 //     showDev(dev_idx, 10);
 
     #if SCAN_MEMORY==CONST_MEMORY
