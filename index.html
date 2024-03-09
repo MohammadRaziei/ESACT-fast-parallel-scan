@@ -125,12 +125,12 @@
 
     // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
 
-    function Text(x, y, mathExpression) {
+    function Text(x, y, width, height, mathExpression) {
       this.x = x;
       this.y = y;
       this.mathExpression = mathExpression;
-      this.width = 100;
-      this.height = 50;
+      this.width = width;
+      this.height = height;
 
       if (this.mathExpression !== "") {
         // Render the LaTeX expression using KaTeX
@@ -143,8 +143,8 @@
         // Create an SVG text element
         this.elem = svgD3
           .append("foreignObject")
-          .attr("x", this.x - this.width / 2)
-          .attr("y", this.y - this.height / 2)
+          .attr("x", this.x)
+          .attr("y", this.y)
           .attr("width", this.width) // Adjust the width as needed
           .attr("height", this.height) // Adjust the height as needed
           .html(renderedHTMLcenter);
@@ -185,7 +185,7 @@
       }
 
       addText(text) {
-        Text(this.x + this.width / 2, this.y + this.height / 2, text);
+        Text(this.x, this.y, this.width, this.height, text);
       }
 
       getBottomCenter() {
