@@ -21,12 +21,12 @@ int main() {
 	std::uniform_real_distribution<> dis(1, 10);
 
 	constexpr size_t nt = 1024;
-	constexpr size_t n_repeat = 50;
+	constexpr size_t n_repeat = 100;
 	std::chrono::time_point<chrono_clock> start_time, stop_time;
 	double tm = 0;
 
 
-	for (size_t m = 10; m < 27; ++m) {
+	for (size_t m = 10; m < 33; ++m) {
 		printf("\n\n=========================\nm = %zd\n=========================\n", m);
 		const size_t size = 1ll << m;
 		std::vector<float> in_array(size, 0);
@@ -61,15 +61,15 @@ int main() {
 				start_time = chrono_clock::now();
 				gpuScan(in_array.data(), gpuout_array.data(), size, method);
 				stop_time = chrono_clock::now();
-				tm = std::chrono::duration_cast<std::chrono::microseconds>(stop_time - start_time).count() / 1000.;
+				tm = std::chrono::duration_cast<std::chrono::nanoseconds>(stop_time - start_time).count() * 1e-6;
 				ktm = gpuScan.getTime();
-        		printf("Total Time: %.3f ms\n", tm);
-			    printf("Kernel Time: %.3f ms\n", ktm);
+        		printf("Total Time: %.6f ms\n", tm);
+			    printf("Kernel Time: %.6f ms\n", ktm);
             }
 
 			const double mse = calculateMSE(cpuout_array.data(), gpuout_array.data(), nt);
-			if (mse>.0001) 
-			throw std::runtime_error("mse is too large");
+			if (mse > 1e-4) 
+				throw std::runtime_error("mse is too large");
 			printf("MSE: %g\n", mse);
 		}
 	}

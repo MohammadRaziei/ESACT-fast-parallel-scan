@@ -68,7 +68,7 @@ def main():
     if args.output:
         with open(args.output, 'w') as json_file:
             json.dump(parsed_data, json_file, indent=3)
-        print("Saved as \"%s.json\""%(args.output))
+        print("Saved as \"%s\""%(args.output))
     else:
         print(json.dumps(parsed_data, indent=3))
 

@@ -17,7 +17,7 @@ oneblock: src/oneblock.cpp src/scan.cu src/scan.h create_build_folder
 	$(NVCC) src/oneblock.cpp src/scan.cu -o build/oneblock.out
 	
 multiblocks: src/multiblocks.cpp src/scan.cu src/scan.h create_build_folder
-	$(NVCC) src/multiblocks.cpp src/scan.cu -o build/multiblocks.out
+	$(NVCC) src/multiblocks.cpp src/scan.cu -o build/multiblocks.out 
 
 idx: src/idx.cu 
 	nvcc src/idx.cu -o build/idx.out
@@ -34,8 +34,14 @@ json: multiblocks create_results_folder
 analysis: multiblocks create_results_folder
 	build/multiblocks.out | python tools/multiblocks_analysis.py
 
-analysis-json: multiblocks create_results_folder
+analysis-json: create_results_folder results/multiblocks.json
 	python tools/multiblocks_analysis.py -i results/multiblocks.json --json
+
+
+oneblockG: src/oneblock.cpp src/scan.cu src/scan.h create_build_folder
+	$(NVCC) src/oneblock.cpp src/scan.cu -o build/oneblock.out -DSCAN_MEMORY=GLOBAL_MEMORY
+	
+
 
 
 
