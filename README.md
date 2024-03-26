@@ -49,3 +49,17 @@ NVIDIA GeForce RTX 3090
 </div>
 
 [Data](./NVIDIA-GeForce-RTX-3090/)
+
+
+## NVIDIA A100 PCIE 40GB
+
+<div>
+<img src="./NVIDIA-A100-PCIE-40GB/multiblocks_analysis_results_abs.png" width="49%">
+<img src="./NVIDIA-A100-PCIE-40GB/multiblocks_analysis_results_rel.png" width="48%">
+<caption>
+NVIDIA A100 PCIE 40GB
+</caption>
+</div>
+
+[Data](./NVIDIA-A100-PCIE-40GB/)
+
