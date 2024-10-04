@@ -5,7 +5,6 @@
   <title>Prefix Sum Algorithm</title>
 
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -16,7 +15,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <!-- Include Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-  <!-- Add custom styles for GitHub repository page -->
   <style>
     html,
     body {
@@ -33,85 +31,83 @@
 </head>
 
 <body class="bg-gray-100">
-<div class="">
-  <div class="github-logo">
-    <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer">
-      <div class="inline flex-col relative">
-        <i class="fab fa-github fa-2x flex"></i>
-        <span class=""> Github Repository </span>
-      </div>
-      <div class="flex">
-        <img class="inline mr-2"
-             src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
-        <img class="inline"
-             src="https://img.shields.io/github/forks/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
-      </div>
-    </a>
-  </div>
-  <div class="my-4">
-    <div class="p-4">
-      <h1 class="text-2xl font-bold mb-4 mt-12">Prefix-Sum Algorithm</h1>
-
-      <h2 class="text-xl font-bold mb-4 mt-1">ESACT Algorithm</h2>
-
-      <p>
-        \( \Omega_n[i] = \frac{\Omega_n[\ \lfloor\frac{i}2\rfloor\ ] - 1}{2}
-        + {\big(1-\operatorname{mod}(i,2)\big)} \ \frac{n}{2} \)
-      </p>
-
-      <h3 class="text-xl font-bold mb-4 mt-1">
-        Prefix Sum Algorithm's Graph
-      </h3>
-      <p class="mb-4">Please input the power of two.</p>
-
-      <div class="flex-inline">
-        <label for="selectAlgorithms">Choose a Algorithm:</label>
-        <select name="selectAlgorithms" id="selectAlgorithms"
-                class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
-          <option value="blelloch">Blelloch</option>
-          <option value="esact" selected="selected">ESACT</option>
-        </select>
-      </div>
-
-      <div class="flex-inline">
-        <label for="inputNumberOfNodes">Choose a value:</label>
-        <input id="inputNumberOfNodes" value="8" type="number"
-               class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
-      </div>
-
-      <button
-              class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-              onclick="onApplyBtn()">
-        Apply
-      </button>
-
-      <div class="w-full my-5 overflow-hidden">
-        <div class="m-0">
-          <svg id="canvas"></svg>
-        </div>
-      </div>
-
-      <button
-              class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-              onclick="onSaveBtn()">
-        Save
-      </button>
+<div class="github-logo">
+  <a href="https://github.com/MohammadRaziei/ESACT-fast-parallel-scan" target="_blank" rel="noopener noreferrer">
+    <div class="inline flex-col relative">
+      <i class="fab fa-github fa-2x flex"></i>
+      <span class="">Github Repository</span>
     </div>
+    <div class="flex">
+      <img class="inline mr-2" src="https://img.shields.io/github/stars/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
+      <img class="inline" src="https://img.shields.io/github/forks/mohammadraziei/ESACT-fast-parallel-scan?style=social" />
+    </div>
+  </a>
+</div>
+
+<div class="my-4">
+  <div class="p-4">
+    <h1 class="text-2xl font-bold mb-4 mt-12">Prefix-Sum Algorithm</h1>
+
+    <p class="mb-4">The prefix-sum problem is fundamental in parallel algorithms, where the goal is to compute the cumulative sums of an array of numbers. The result at each position in the array is the sum of all previous elements up to that point.</p>
+
+    <h2 class="text-xl font-bold mb-4 mt-1">ESACT Algorithm</h2>
+
+    <p class="mb-4">The <strong>Efficient Sequentially Addressed Calculating Tree (ESACT)</strong> algorithm is a specialized technique designed to perform prefix-sum calculations efficiently. Unlike traditional methods, ESACT uses a tree-like structure where each node in the tree corresponds to a value in the input array. The algorithm recursively divides the problem into smaller subproblems, addressing the nodes sequentially to minimize computation steps.</p>
+
+    <p>It works by splitting the array into two halves, calculating the prefix sums for each half, and then combining the results in a sequentially addressed manner. The formula used to represent each step in the algorithm is:</p>
+
+    <p>
+      \( \Omega_n[i] = \frac{\Omega_n[\ \lfloor\frac{i}{2}\rfloor\ ] - 1}{2} + \left(1 - \operatorname{mod}(i, 2)\right) \frac{n}{2} \)
+    </p>
+
+    <p>This equation governs the computation for each index, ensuring that the values are addressed efficiently using a recursive approach. By reducing redundant calculations, ESACT offers superior performance for large-scale prefix-sum problems, particularly in parallel processing environments.</p>
+
+    <h3 class="text-xl font-bold mb-4 mt-1">Prefix Sum Algorithm's Graph</h3>
+    <p class="mb-4">Use the input below to select the algorithm and number of nodes for the visual representation of the prefix-sum computation.</p>
+
+    <div class="flex-inline">
+      <label for="selectAlgorithms">Choose an Algorithm:</label>
+      <select name="selectAlgorithms" id="selectAlgorithms"
+              class="border border-gray-300 px-4 py-2 rounded-lg mb-4">
+        <option value="blelloch">Blelloch</option>
+        <option value="esact" selected="selected">ESACT</option>
+      </select>
+    </div>
+
+    <div class="flex-inline">
+      <label for="inputNumberOfNodes">Choose a value:</label>
+      <input id="inputNumberOfNodes" value="8" type="number"
+             class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
+    </div>
+
+    <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyBtn()">
+      Apply
+    </button>
+
+    <div class="w-full my-5 overflow-hidden">
+      <div class="m-0">
+        <svg id="canvas"></svg>
+      </div>
+    </div>
+
+    <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onSaveBtn()">
+      Save
+    </button>
   </div>
 </div>
+
 <script src="algorithm-graph.js"></script>
+
 <div class="p-4">
   <h3 class="text-xl font-bold mb-4 mt-12">ESACT's Permutation Matrix</h3>
-  <p class="mb-4">Please input the power of two.</p>
+  <p class="mb-4">The permutation matrix represents the order in which ESACT processes data. Input a power of two to visualize the matrix.</p>
 
   <div class="flex-inline">
     <label for="inputMatrix">Choose a value:</label>
     <input id="inputMatrix" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
   </div>
 
-  <button
-          class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-          onclick="onApplyMatrixBtn()">
+  <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyMatrixBtn()">
     Apply
   </button>
 
@@ -121,9 +117,7 @@
     </div>
   </div>
 
-  <button
-          class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-          onclick="onSaveMatrixBtn()">
+  <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onSaveMatrixBtn()">
     Save
   </button>
 </div>
@@ -132,16 +126,14 @@
 
 <div class="p-4">
   <h3 class="text-xl font-bold mb-4 mt-12">ESACT's Indices</h3>
-  <p class="mb-4">Please input the power of two.</p>
+  <p class="mb-4">ESACT processes data based on specific indices at each stage. Enter a power of two to generate the table of indices used in the algorithm's steps.</p>
 
   <div class="flex-inline">
     <label for="inputArray">Choose a value:</label>
     <input id="inputArray" value="8" type="number" class="border border-gray-300 px-4 py-2 rounded-lg mb-4 w-36" />
   </div>
 
-  <button
-          class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold"
-          onclick="onApplyArrayBtn()">
+  <button class="border border-gray-300 w-64 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-blue-500 hover:bg-blue-700 text-white font-bold" onclick="onApplyArrayBtn()">
     Apply
   </button>
 
@@ -151,16 +143,12 @@
     </div>
   </div>
 
-  <br />
-  <button
-          class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-gray-500 hover:bg-gray-700 text-white font-bold"
-          onclick="onCopyBtn()">
+  <button class="border border-gray-300 px-4 py-2 rounded-lg mb-4 bg-gray-100 bg-gray-500 hover:bg-gray-700 text-white font-bold" onclick="onCopyBtn()">
     Copy to clipboard
   </button>
 </div>
 
 <script src="algorithm-indices.js"></script>
-
 </body>
 
 </html>
