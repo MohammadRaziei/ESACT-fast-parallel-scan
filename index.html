@@ -310,16 +310,16 @@
   
   <script>
     // Make sure MathJax processes the page after dynamic content loads
-    // if (typeof MathJax !== 'undefined') {
-    //   MathJax.typesetPromise();
-    // }
+    if (typeof MathJax !== 'undefined') {
+      MathJax.typesetPromise();
+    }
     
     // Helper function to trigger MathJax rendering
-    // function renderMath() {
-    //   if (typeof MathJax !== 'undefined') {
-    //     MathJax.typesetPromise();
-    //   }
-    // }
+    function renderMath() {
+      if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise();
+      }
+    }
     
   </script>
 </body>
