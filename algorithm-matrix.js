@@ -136,7 +136,7 @@ function createIndices(n) {
 }
 
 function isPowerTwo(num) {
-    return Math.abs(2 ** Math.round(Math.log2(num)) - num) < 1e-3;
+    return num > 0 && Math.abs(2 ** Math.round(Math.log2(num)) - num) < 1e-3;
 }
 
 const inputMatrix = document.getElementById("inputMatrix");
