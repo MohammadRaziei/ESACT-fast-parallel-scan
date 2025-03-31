@@ -187,7 +187,7 @@
         <div class="w-full sm:w-auto">
           <label class="block text-sm font-medium mb-1">Number of Nodes:</label>
           <input id="inputNumberOfNodes" value="16" type="number" min="2" max="32" step="2"
-                 class="w-full p-2 border rounded-lg">
+                 class="multiplier-input w-full p-2 border rounded-lg">
         </div>
         
         <div class="w-full sm:w-auto flex items-end">
@@ -224,7 +224,7 @@
               <i class="fas fa-expand-arrows-alt mr-1"></i> Matrix Size:
             </label>
             <input id="inputMatrix" value="16" type="number" min="2" max="64" step="2"
-                   class="w-full p-2 border rounded-lg">
+                   class="multiplier-input w-full p-2 border rounded-lg">
           </div>
           
           <div class="w-full sm:w-auto flex items-end">
@@ -256,8 +256,8 @@
             <label class="block text-sm font-medium mb-1">
               <i class="fas fa-hashtag mr-1"></i> Elements:
             </label>
-            <input id="inputArray" value="16" type="number" min="2" max="64" step="2"
-                   class="w-full p-2 border rounded-lg">
+            <input id="inputArray" value="16" type="number" min="2" max="2048" step="2"
+                   class="multiplier-input w-full p-2 border rounded-lg">
           </div>
           
           <div class="w-full sm:w-auto flex items-end">
@@ -304,6 +304,7 @@
   </footer>
 
   <!-- Original Scripts -->
+  <script src="common.js"></script>
   <script src="algorithm-graph.js"></script>
   <script src="algorithm-matrix.js"></script>
   <script src="algorithm-indices.js"></script>

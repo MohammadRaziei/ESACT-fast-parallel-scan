@@ -312,10 +312,6 @@ input.addEventListener("keypress", function (event) {
   }
 });
 
-function isPowerTwo(num) {
-  return num > 0 && Math.abs(2 ** Math.round(Math.log2(num)) - num) < 1e-3;
-}
-
 function onApplyBtn() {
   const numnodes = parseInt(input.value);
   if (isPowerTwo(numnodes)) {
