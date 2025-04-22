@@ -30,7 +30,7 @@ function createPermutationMatrix(indices) {
     svgMatrixD3
         .attr("width", matrixSize * 50 + 50)
         .attr("height", matrixSize * 50 + 50)
-        .attr("style", "background-color: #f2f2f2;");
+        .attr("style", "background-color: #ffffff;");
 
     // Create a matrix of rectangles
     const matrix = svgMatrixD3
