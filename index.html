@@ -171,34 +171,125 @@
       </div>
     </section>
 
-    <!-- Implementation Section -->
+
     <section class="mb-16">
-      <h2 class="text-3xl font-bold mb-8">Implementation Details</h2>
-
+      <h2 class="text-3xl font-bold mb-8">Our Scan Algorithms</h2>
+    
       <div class="grid md:grid-cols-2 gap-8">
+    
+        <!-- SACT Algorithm -->
         <div class="bg-white p-8 rounded-xl shadow-lg">
-          <h3 class="text-xl font-bold mb-4">Key Components</h3>
-          <ul class="space-y-4 text-gray-600">
-            <li>• Precomputed index permutation table</li>
-            <li>• Two-phase execution (reduction + distribution)</li>
-            <li>• Shared memory optimization layer</li>
-            <li>• Block-level parallel execution</li>
-          </ul>
+          <h3 class="text-xl font-semibold mb-4 text-indigo-700">Algorithm 1: SACT</h3>
+          <p class="text-gray-700 mb-2">
+            <strong>Input:</strong> \( X \in \mathbb{R}^n \), located at global memory<br>
+            <strong>Output:</strong> \( Y \in \mathbb{R}^n \), located at global memory<br>
+            <strong>Shared Memory:</strong> \( S \)
+          </p>
+    
+          <ol class="list-decimal list-inside space-y-2 text-gray-700">
+            <li>
+              Precompute permutation matrix \( \mathbf{P} \) using \( \Omega_n \)
+            </li>
+            <li>
+              Load \( S \) from \( X \):
+              <ul class="list-disc list-inside ml-4">
+                <li>\( S = \mathbf{P}X \)</li>
+                <li>\( S[i] = X[\Omega_n[i]] \quad \forall\ 0 \leq i < n \)</li>
+              </ul>
+            </li>
+            <li>
+              Perform SACT Tree Scan:
+              <ul class="list-disc list-inside ml-4">
+                <li>\( S = FT(S) \)</li>
+                <li>\( \sigma = S[0] \), then \( S[0] = 0 \)</li>
+                <li>\( S = BT(S) \)</li>
+              </ul>
+            </li>
+            <li>
+              Load \( Y \) from \( S \):
+              <div class="mt-1 ml-4">
+                <p class="text-indigo-600 font-medium">Exclusive scan:</p>
+                <ul class="list-disc list-inside ml-4">
+                  <li>\( Y = \mathbf{P}^T S \)</li>
+                  <li>\( Y[\Omega_n[i]] = S[i] \)</li>
+                </ul>
+                <p class="text-indigo-600 font-medium mt-2">Inclusive scan:</p>
+                <ul class="list-disc list-inside ml-4">
+                  <li>\( Y = \mathbf{Q}\mathbf{P}^T S + \sigma \mathbf{E}_n \)</li>
+                  <li>\( Y[\Omega_n[i-1]] = S[i], \quad 0 < i < n \)</li>
+                  <li>\( Y[n - 1] = \sigma \)</li>
+                </ul>
+              </div>
+            </li>
+          </ol>
         </div>
-
+    
+        <!-- ESACT Algorithm -->
         <div class="bg-white p-8 rounded-xl shadow-lg">
-          <h3 class="text-xl font-bold mb-4">Architecture Support</h3>
-          <ul class="space-y-4 text-gray-600">
-            <li>• NVIDIA CUDA GPUs (Compute Capability 3.5+)</li>
-            <li>• AMD ROCm (Experimental)</li>
-            <li>• Multi-GPU configurations</li>
-            <li>• Tensor Core integration (Future Work)</li>
-          </ul>
+          <h3 class="text-xl font-semibold mb-4 text-indigo-700">Algorithm 2: ESACT (faster and more efficient)</h3>
+          <p class="text-gray-700 mb-2">
+            <strong>Input:</strong> \( X \in \mathbb{R}^n \), located at global memory<br>
+            <strong>Output:</strong> \( Y \in \mathbb{R}^n \), located at global memory<br>
+            <strong>Shared Memory:</strong> \( S \)
+          </p>
+    
+          <ol class="list-decimal list-inside space-y-2 text-gray-700">
+            <li>
+              Precompute permutation matrix \( \mathbf{P} \) using \( \Omega_n \)
+            </li>
+            <li>
+              Load \( S \) from \( X \):
+              <ul class="list-disc list-inside ml-4">
+                <li>\( \mathbf{P}^T S = X \)</li>
+                <li>\( S[\Omega_n[i]] = X[i] \quad \forall\ 0 \leq i < n \)</li>
+              </ul>
+            </li>
+            <li>
+              Perform SACT Tree Scan:
+              <ul class="list-disc list-inside ml-4">
+                <li>\( S = FT(S) \)</li>
+                <li>\( \sigma = S[0] \), then \( S[0] = 0 \)</li>
+                <li>\( S = BT(S) \)</li>
+              </ul>
+            </li>
+            <li>
+              Load \( Y \) from \( S \):
+              <div class="mt-1 ml-4">
+                <p class="text-indigo-600 font-medium">Exclusive scan:</p>
+                <ul class="list-disc list-inside ml-4">
+                  <li>\( Y = \mathbf{P}^T S \)</li>
+                  <li>\( Y[i] = S[\Omega_n[i]] \)</li>
+                </ul>
+                <p class="text-indigo-600 font-medium mt-2">Inclusive scan:</p>
+                <ul class="list-disc list-inside ml-4">
+                  <li>\( Y = \mathbf{Q}\mathbf{P}^T S + \sigma \mathbf{E}_n \)</li>
+                  <li>\( Y[i - 1] = S[\Omega_n[i]], \quad 0 < i < n \)</li>
+                  <li>\( Y[n - 1] = \sigma \)</li>
+                </ul>
+              </div>
+            </li>
+          </ol>
         </div>
+    
       </div>
     </section>
-
-
+    
+    <!-- Ωₙ Equation
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-8">Permutation Index Function</h2>
+      <div class="bg-white p-8 rounded-xl shadow-lg">
+        <p class="text-gray-700 text-base mb-4">
+          The recursive structure of \( \Omega_n[i] \) can be computed using the following closed-form:
+        </p>
+        <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black">
+          \[
+          \Omega_n[i] = \frac{\Omega_n\left[\left\lfloor \frac{i}{2} \right\rfloor\right] - 1}{2}
+          + \left(1 - \mathrm{mod}(i, 2)\right) \cdot \frac{n}{2}
+          \]
+        </div>
+      </div>
+    </section> -->
+    
 
     <!-- Algorithm Graph Visualization -->
     <section class="algorithm-card mb-12">
