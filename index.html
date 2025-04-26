@@ -85,6 +85,92 @@
 
 
 
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold mb-8">What Is The Scan Operation?</h2>
+
+      <div class="bg-white p-8 rounded-xl shadow-lg text-gray-700 space-y-6">
+
+        <!-- Introduction: What is Scan -->
+        <p class="text-base leading-relaxed">
+          In parallel computing, a <strong>scan</strong> (also known as <em>prefix sum</em>) is an operation that
+          computes all the partial results of applying a binary associative operator \( \oplus \)
+          over a sequence. Scans are widely used in algorithms for efficient data parallelism,
+          sorting, stream compaction, and other GPU-accelerated computations.
+        </p>
+
+        <!-- Two-column layout: Inclusive vs Exclusive -->
+        <div class="grid md:grid-cols-2 gap-8">
+
+          <!-- Left column: Inclusive Scan -->
+          <div>
+            <h3 class="text-xl font-semibold text-indigo-700 mb-4">Inclusive Scan</h3>
+            <p class="mb-4">
+              Computes the combination of elements up to and including the current index.
+            </p>
+            <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black">
+              \[
+              Y[i] = X[0] \oplus X[1] \oplus \dots \oplus X[i]
+              \]
+            </div>
+          </div>
+
+          <!-- Right column: Exclusive Scan -->
+          <div>
+            <h3 class="text-xl font-semibold text-indigo-700 mb-4">Exclusive Scan</h3>
+            <p class="mb-4">
+              Computes the combination of elements up to, but not including, the current index.
+              The first element is set to the identity of \( \oplus \).
+            </p>
+            <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black">
+              \[
+              Y[i] = X[0] \oplus X[1] \oplus \dots \oplus X[i-1]
+              \quad ,\quad Y[0] = \text{identity}
+              \]
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Numerical Example -->
+        <div class="mt-8">
+          <h3 class="text-xl font-semibold text-indigo-700 mb-4">Numerical Example</h3>
+
+          <!-- Example array -->
+          <p class="mb-4">
+            Suppose we have the array:
+          </p>
+          <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black mb-4">
+            \[ X = [3, 1, 7, 0, 4, 1, 6, 3] \]
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8">
+
+            <!-- Inclusive Scan Example -->
+            <div>
+              <p class="mb-2"><strong>Inclusive Scan (sum operation):</strong></p>
+              <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black">
+                \[
+                Y = [3, 4, 11, 11, 15, 16, 22, 25]
+                \]
+              </div>
+            </div>
+
+            <!-- Exclusive Scan Example -->
+            <div>
+              <p class="mb-2"><strong>Exclusive Scan (sum operation):</strong></p>
+              <div class="bg-gray-100 p-4 rounded-md font-mono text-sm text-black">
+                \[
+                Y = [0, 3, 4, 11, 11, 15, 16, 22]
+                \]
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
 
 
 
@@ -106,10 +192,12 @@
           <h3 class="text-xl font-bold mb-4">Mathematical Foundation</h3>
           <p class="text-gray-600">
             The recursive permutation formula enables conflict-free access:
-            <br><br>
-            \[
-            \Omega_n[i] = \frac{\Omega_n\left[\left\lfloor\frac{i}{2}\right\rfloor\right] - 1}{2} + \big(1 - \bmod(i, 2)\big) \frac{n}{2}
-            \]
+            <div class="mt-2 bg-gray-100 p-2 rounded-md font-mono text-sm text-black">
+              \[
+              \Omega_n[i] = \frac{\Omega_n\left[\left\lfloor\frac{i}{2}\right\rfloor\right] - 1}{2} + \big(1 - \bmod(i,
+              2)\big) \frac{n}{2}
+              \]
+            </div>
           </p>
         </div>
 
@@ -174,9 +262,9 @@
 
     <section class="mb-16">
       <h2 class="text-3xl font-bold mb-8">Our Scan Algorithms</h2>
-    
+
       <div class="grid md:grid-cols-2 gap-8">
-    
+
         <!-- SACT Algorithm -->
         <div class="bg-white p-8 rounded-xl shadow-lg">
           <h3 class="text-xl font-semibold mb-4 text-indigo-700">Algorithm 1: SACT</h3>
@@ -185,7 +273,7 @@
             <strong>Output:</strong> \( Y \in \mathbb{R}^n \), located at global memory<br>
             <strong>Shared Memory:</strong> \( S \)
           </p>
-    
+
           <ol class="list-decimal list-inside space-y-2 text-gray-700">
             <li>
               Precompute permutation matrix \( \mathbf{P} \) using \( \Omega_n \)
@@ -223,7 +311,7 @@
             </li>
           </ol>
         </div>
-    
+
         <!-- ESACT Algorithm -->
         <div class="bg-white p-8 rounded-xl shadow-lg">
           <h3 class="text-xl font-semibold mb-4 text-indigo-700">Algorithm 2: ESACT (faster and more efficient)</h3>
@@ -232,7 +320,7 @@
             <strong>Output:</strong> \( Y \in \mathbb{R}^n \), located at global memory<br>
             <strong>Shared Memory:</strong> \( S \)
           </p>
-    
+
           <ol class="list-decimal list-inside space-y-2 text-gray-700">
             <li>
               Precompute permutation matrix \( \mathbf{P} \) using \( \Omega_n \)
@@ -270,10 +358,10 @@
             </li>
           </ol>
         </div>
-    
+
       </div>
     </section>
-    
+
     <!-- Ωₙ Equation
     <section class="mb-16">
       <h2 class="text-3xl font-bold mb-8">Permutation Index Function</h2>
@@ -289,7 +377,7 @@
         </div>
       </div>
     </section> -->
-    
+
 
     <!-- Algorithm Graph Visualization -->
     <section class="algorithm-card mb-12">
